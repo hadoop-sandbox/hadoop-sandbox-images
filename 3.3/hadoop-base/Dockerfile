@@ -1,4 +1,4 @@
-FROM adoptopenjdk:8-jdk-hotspot-focal AS downloader
+FROM adoptopenjdk:11-jdk-hotspot-focal AS downloader
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /tmp
 COPY ./hadoop-downloader.sh /tmp/hadoop-downloader.sh
@@ -13,7 +13,7 @@ COPY ./environment /etc/environment
 RUN chown root:root /etc/environment && \
   chmod 644 /etc/environment
  
-FROM adoptopenjdk:8-jdk-hotspot-focal
+FROM adoptopenjdk:11-jdk-hotspot-focal
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY --from=downloader /hadoop /hadoop
 COPY --from=downloader /usr/bin/tini /tini
