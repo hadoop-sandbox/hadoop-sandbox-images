@@ -1,4 +1,4 @@
-ARG java_version=11
+ARG java_version=8
 
 FROM eclipse-temurin:${java_version}-jdk-focal AS downloader
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
