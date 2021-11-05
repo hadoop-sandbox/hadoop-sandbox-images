@@ -1,4 +1,6 @@
-FROM eclipse-temurin:11-jdk-focal AS downloader
+ARG java_version=11
+
+FROM eclipse-temurin:${java_version}-jdk-focal AS downloader
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /tmp
 COPY ./hadoop-downloader.sh /tmp/hadoop-downloader.sh
@@ -13,7 +15,7 @@ COPY ./environment /etc/environment
 RUN chown root:root /etc/environment && \
   chmod 644 /etc/environment
  
-FROM eclipse-temurin:11-jdk-focal
+FROM eclipse-temurin:${java_version}-jdk-focal
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY --from=downloader /hadoop /hadoop
 COPY --from=downloader /usr/bin/tini /tini
