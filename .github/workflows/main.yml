@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-java-${{ matrix.java_version }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -41,8 +41,8 @@ jobs:
       -
         name: Build images
         id: build_images
-        run: make all java_version=${{ matrix.java_version }} cache=/tmp/.buildx-cache
+        run: make all java_version=${{ matrix.java_version }} docker_org=${{ secrets.DOCKERHUB_USERNAME }} cache=/tmp/.buildx-cache
       -
         name: Push images
         id: push_images
-        run: make push java_version=${{ matrix.java_version }} cache=/tmp/.buildx-cache
+        run: make push java_version=${{ matrix.java_version }} docker_org=${{ secrets.DOCKERHUB_USERNAME }} cache=/tmp/.buildx-cache
