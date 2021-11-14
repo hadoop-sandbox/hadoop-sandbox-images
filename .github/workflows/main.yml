@@ -31,7 +31,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-java-${{ matrix.java_version }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-java-${{ matrix.java_version }}-buildx
       -
         name: Login to DockerHub
         uses: docker/login-action@v1 
