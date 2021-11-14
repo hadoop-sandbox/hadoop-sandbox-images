@@ -1,0 +1,76 @@
+java_version := 8
+default_java_version := 8
+docker_org := packet23
+platforms := linux/amd64,linux/arm64
+cache := cache
+docker := docker
+hadoop_major := 3
+hadoop_minor := 3
+hadoop_patch := 1
+
+version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).$(hadoop_minor).$(hadoop_patch)
+
+tags_always := $(foreach version_tag,$(version_tags),$(version_tag)-java-$(java_version)) java-$(java_version)
+tags_default := $(tags_always) $(version_tags) latest
+
+base_image_target := hadoop-base
+images_target := hadoop-client \
+	hadoop-hdfs-datanode \
+	hadoop-hdfs-namenode \
+	hadoop-mapred-jobhistoryserver \
+	hadoop-yarn-resourcemanager \
+	hadoop-yarn-nodemanager
+
+base_image := $(addsuffix -java-$(java_version), $(base_image_target))
+images := $(addsuffix -java-$(java_version), $(images_target))
+
+base_image_iid := $(addsuffix .iid, $(base_image))
+images_iid := $(addsuffix .iid, $(images))
+
+images_push := $(addsuffix .push, $(images) $(base_image))
+
+all: $(base_image_iid) $(images_iid)
+
+push: $(images_push)
+
+clean:
+	$(RM) -r "$(cache)" && \
+	$(RM) *.iid *.push
+
+%.iid: Dockerfile
+	$(docker) buildx build \
+		--cache-from "type=local,src=$(cache)" \
+		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--build-arg java_version="$(java_version)" \
+		--iidfile "$@" \
+		--platform "$(platforms)" \
+		--output type=image \
+		--target "$(subst -java-$(java_version).iid,,$@)" \
+		-f "$<" .
+
+$(images_iid): $(base_image_iid)
+
+%.push: %.iid
+ifeq ($(java_version),$(default_java_version))
+	$(docker) buildx build \
+		--cache-from "type=local,src=$(cache)" \
+		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--build-arg java_version="$(java_version)" \
+		--platform "$(platforms)" \
+		--target "$(subst -java-$(java_version).push,,$@)" \
+		$(foreach tag,$(tags_default), --tag "$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
+		--push . && \
+	touch "$@"
+else
+	$(docker) buildx build \
+		--cache-from "type=local,src=$(cache)" \
+		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--build-arg java_version="$(java_version)" \
+		--platform "$(platforms)" \
+		--target "$(subst -java-$(java_version).push,,$@)" \
+		$(foreach tag,$(tags_always), --tag "$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
+		--push . && \
+	touch "$@"
+endif
+
+.PHONY: all push clean

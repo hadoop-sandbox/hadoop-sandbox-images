@@ -3,7 +3,7 @@ ARG java_version=8
 FROM eclipse-temurin:${java_version}-jdk-focal AS downloader
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /tmp
-COPY ./hadoop-downloader.sh /tmp/hadoop-downloader.sh
+COPY --chown=root:root ./hadoop-base/hadoop-downloader.sh /tmp/hadoop-downloader.sh
 RUN chown root:root /tmp/hadoop-downloader.sh && \
   chmod 755 /tmp/hadoop-downloader.sh && \
   /tmp/hadoop-downloader.sh / && \
@@ -11,11 +11,11 @@ RUN chown root:root /tmp/hadoop-downloader.sh && \
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-upgrade --no-install-recommends tini gosu && \
   rm -rf /var/lib/apt/lists/*
-COPY ./environment /etc/environment
+COPY --chown=root:root ./hadoop-base/environment /etc/environment
 RUN chown root:root /etc/environment && \
   chmod 644 /etc/environment
  
-FROM eclipse-temurin:${java_version}-jdk-focal
+FROM eclipse-temurin:${java_version}-jdk-focal AS hadoop-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY --from=downloader /hadoop /hadoop
 COPY --from=downloader /usr/bin/tini /tini
@@ -24,7 +24,7 @@ COPY --from=downloader /etc/environment /etc/environment
 ENV HADOOP_HOME="/hadoop" \
   PATH="/hadoop/bin:/hadoop/sbin:${PATH}" \
   HADOOP_OPTS="-Dhadoop.tmp.dir=/data"
-COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chown=root:root ./hadoop-base/docker-entrypoint.sh /docker-entrypoint.sh
 RUN useradd -ms /bin/bash sandbox && \
   echo "sandbox:sandbox" | chpasswd && \
   groupadd -r -g 120 hadoop && \
@@ -44,3 +44,31 @@ RUN useradd -ms /bin/bash sandbox && \
   rm -rf /var/lib/apt/lists/*
 WORKDIR /
 ENTRYPOINT ["/tini", "--", "/docker-entrypoint.sh"]
+
+FROM hadoop-base AS hadoop-client
+COPY --chown=root:root ./hadoop-client/docker-entrypoint.d /docker-entrypoint.d
+RUN  apt-get update && \
+   DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-upgrade --no-install-recommends openssh-server && \
+   rm -rf /var/lib/apt/lists/* && \
+   install -d -o root -g root -m 755 /run/sshd && \
+   rm /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
+   mv /etc/ssh /etc/ssh.in
+CMD ["/usr/sbin/sshd", "-D", "-e"]
+
+FROM hadoop-base AS hadoop-hdfs-datanode
+COPY --chown=root:root ./hadoop-hdfs-datanode/docker-entrypoint.d /docker-entrypoint.d
+CMD ["gosu", "hdfs", "hdfs", "datanode"]
+
+FROM hadoop-base AS hadoop-hdfs-namenode
+COPY --chown=root:root ./hadoop-hdfs-namenode/docker-entrypoint.d /docker-entrypoint.d
+CMD ["gosu", "hdfs", "hdfs", "namenode"]
+
+FROM hadoop-base AS hadoop-mapred-jobhistoryserver
+COPY --chown=root:root ./hadoop-mapred-jobhistoryserver/docker-entrypoint.d /docker-entrypoint.d
+CMD ["gosu", "mapred", "mapred", "historyserver"]
+
+FROM hadoop-base AS hadoop-yarn-nodemanager
+CMD ["gosu", "yarn", "yarn", "nodemanager"]
+
+FROM hadoop-base AS hadoop-yarn-resourcemanager
+CMD ["gosu", "yarn", "yarn", "resourcemanager"]

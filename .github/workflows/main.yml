@@ -10,6 +10,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java_version: [8, 11]
     steps:
       -
         name: Checkout
@@ -36,107 +39,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push hadoop-base 3.3.1
-        id: build_hadoop_base331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-base
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.3.1
+        name: Build images
+        id: build_images
+        run: make all java_version=${{ matrix.java_version }} cache=/tmp/.buildx-cache
       -
-        name: hadoop-base 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_base331.outputs.digest }}
-      -
-        name: Build and push hadoop-client 3.3.1
-        id: build_hadoop_client331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-client
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.3.1
-      -
-        name: hadoop-client 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_client331.outputs.digest }}
-      -
-        name: Build and push hadoop-hdfs-datanode 3.3.1
-        id: build_hadoop_hdfs_datanode331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-hdfs-datanode
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.3.1
-      -
-        name: hadoop-hdfs-datanode 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_hdfs_datanode331.outputs.digest }}
-      -
-        name: Build and push hadoop-hdfs-namenode 3.3.1
-        id: build_hadoop_hdfs_namenode331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-hdfs-namenode
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.3.1
-      -
-        name: hadoop-hdfs-namenode 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_hdfs_namenode331.outputs.digest }}
-      -
-        name: Build and push hadoop-yarn-resourcemanager 3.3.1
-        id: build_hadoop_yarn_resourcemanager331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-yarn-resourcemanager
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.3.1
-      -
-        name: hadoop-yarn-resourcemanager 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_yarn_resourcemanager331.outputs.digest }}
-      -
-        name: Build and push hadoop-yarn-nodemanager 3.3.1
-        id: build_hadoop_yarn_nodemanager331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-yarn-nodemanager
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.3.1
-      -
-        name: hadoop-yarn-nodemanager 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_yarn_nodemanager331.outputs.digest }}
-      -
-        name: Build and push hadoop-mapred-jobhistoryserver 3.3.1
-        id: build_hadoop_mapred_jobhistoryserver331
-        uses: docker/build-push-action@v2
-        with:
-          context: 3.3/hadoop-mapred-jobhistoryserver
-          platforms: linux/amd64,linux/arm64/v8
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.3,${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.3.1
-      -
-        name: hadoop-mapred-jobhistoryserver 3.3.1 image digest
-        run: echo ${{ steps.build_hadoop_mapred_jobhistoryserver331.outputs.digest }}
+        name: Push images
+        id: push_images
+        run: make push java_version=${{ matrix.java_version }} cache=/tmp/.buildx-cache
