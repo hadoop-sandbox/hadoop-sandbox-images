@@ -22,8 +22,7 @@ COPY --from=downloader /usr/bin/tini /tini
 COPY --from=downloader /usr/sbin/gosu /sbin/gosu
 COPY --from=downloader /etc/environment /etc/environment
 ENV HADOOP_HOME="/hadoop" \
-  PATH="/hadoop/bin:/hadoop/sbin:${PATH}" \
-  HADOOP_OPTS="-Dhadoop.tmp.dir=/data"
+  PATH="/hadoop/bin:/hadoop/sbin:${PATH}"
 COPY --chown=root:root ./hadoop-base/docker-entrypoint.sh /docker-entrypoint.sh
 RUN useradd -ms /bin/bash sandbox && \
   echo "sandbox:sandbox" | chpasswd && \
