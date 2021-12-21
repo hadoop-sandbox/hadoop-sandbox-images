@@ -37,7 +37,6 @@ RUN useradd -ms /bin/bash sandbox && \
   ldconfig && \
   chown root:root /docker-entrypoint.sh && \
   chmod 755 /docker-entrypoint.sh && \
-  install -d -o root -g hadoop -m 775 /data && \
   apt-get update && \
   if [ "$(uname -m)" == "x86_64" ]; then DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-upgrade --no-install-recommends libisal2 ; fi && \
   rm -rf /var/lib/apt/lists/*
