@@ -99,7 +99,7 @@ RUN mkdir -p "/opt/protobuf-src" && \
   rm "/opt/protobuf.tar.gz" && \
   cd /opt/protobuf-src && \
   ./configure --prefix="/opt/protobuf" && \
-  make && \
+  make -j$(nproc) && \
   make install && \
   cd /root && \
   rm -rf "/opt/protobuf-src" && \
@@ -115,7 +115,7 @@ RUN install -d "/opt/hadoop-src" && \
   echo "96c7bb6b0205a5f87dea1bad0b09e70017064439552d632d87abad56b0b2a68fccd62dff38132e2a5c3c60f4c6a34cc69cdbed6510b85b193fb7050f35ac05b8 */opt/hadoop-src.tar.gz" | sha512sum -c && \
   tar xzf "/opt/hadoop-src.tar.gz" --strip-components 1 -C "/opt/hadoop-src" && \
   rm "/opt/hadoop-src.tar.gz" && \
-  cd /opt/hadoop-src && \
+  cd "/opt/hadoop-src" && \
   export JAVA_HOME=$(echo /usr/lib/jvm/temurin-8-jdk*) && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   rm -rf "${HOME}/.m2" && \
@@ -127,6 +127,7 @@ RUN install -d "/opt/hadoop-src" && \
   find "/hadoop/sbin" -type f -print0 | xargs -r0 chmod 755 && \
   find "/hadoop/bin" -type f -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -name \*.cmd -print0 | xargs -r0 rm && \
+  cd "/root" && \
   rm -rf "/opt/hadoop-src"
 
 

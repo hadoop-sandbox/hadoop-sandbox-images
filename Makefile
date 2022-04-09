@@ -13,6 +13,7 @@ version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).
 tags_always := $(foreach version_tag,$(version_tags),$(version_tag)-java-$(java_version)) java-$(java_version)
 tags_default := $(tags_always) $(version_tags) latest
 
+dist_target := hadoop-dist
 base_image_target := hadoop-base
 images_target := hadoop-client \
 	hadoop-hdfs-datanode \
@@ -21,9 +22,11 @@ images_target := hadoop-client \
 	hadoop-yarn-resourcemanager \
 	hadoop-yarn-nodemanager
 
+dist_image := $(dist_target)
 base_image := $(addsuffix -java-$(java_version), $(base_image_target))
 images := $(addsuffix -java-$(java_version), $(images_target))
 
+dist_image_iid := $(addsuffix .iid, $(dist_image))
 base_image_iid := $(addsuffix .iid, $(base_image))
 images_iid := $(addsuffix .iid, $(images))
 
@@ -37,24 +40,35 @@ clean:
 	$(RM) -r "$(cache)" && \
 	$(RM) *.iid *.push
 
+$(dist_image_iid): Dockerfile
+	$(docker) buildx build \
+		--cache-from "type=local,src=$(cache)" \
+		--cache-to "type=local,dest=$(cache)" \
+		--iidfile "$@" \
+		--platform "$(platforms)" \
+		--output type=image \
+		--target "$(patsubst %.iid,%,$@)" \
+		-f "$<" .
+
 %.iid: Dockerfile
 	$(docker) buildx build \
 		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--iidfile "$@" \
 		--platform "$(platforms)" \
 		--output type=image \
-		--target "$(subst -java-$(java_version).iid,,$@)" \
+		--target "$(patsubst %-java-$(java_version).iid,%,$@)" \
 		-f "$<" .
 
+$(base_image_iid): $(dist_image_iid)
 $(images_iid): $(base_image_iid)
 
 %.push: %.iid
 ifeq ($(java_version),$(default_java_version))
 	$(docker) buildx build \
 		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
@@ -64,7 +78,7 @@ ifeq ($(java_version),$(default_java_version))
 else
 	$(docker) buildx build \
 		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,mode=max,dest=$(cache)" \
+		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
