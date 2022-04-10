@@ -127,6 +127,10 @@ RUN install -d "/opt/hadoop-src" && \
   find "/hadoop/sbin" -type f -print0 | xargs -r0 chmod 755 && \
   find "/hadoop/bin" -type f -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -name \*.cmd -print0 | xargs -r0 rm && \
+  install -d -o root -g root -m 1777 "/hadoop/logs" && \
+  rm -rf "/hadoop/etc/hadoop" && \
+  rm -rf "/hadoop/share/doc" && \
+  install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
   cd "/root" && \
   rm -rf "/opt/hadoop-src"
 
