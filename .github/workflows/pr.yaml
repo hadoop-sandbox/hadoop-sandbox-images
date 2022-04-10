@@ -21,8 +21,8 @@ jobs:
       -
         name: Build Hadoop dist
         run: make hadoop-dist.iid cache=/tmp/.buildx-cache
-
       -
+        name: Upload Dist
         uses: actions/upload-artifact@v3
         with:
           name: hadoop-dist
