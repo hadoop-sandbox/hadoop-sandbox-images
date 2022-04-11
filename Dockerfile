@@ -156,9 +156,10 @@ RUN useradd -ms /bin/bash sandbox && \
   apt-get -q update && \
   DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 tini gosu && \
   if [ "$(uname -m)" == "x86_64" ]; then DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends libisal2 ; fi && \
-  ldconfig && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/* && \
+  ln -s libcrypto.so.1.1 "/usr/lib/$(uname -m)-linux-gnu/libcrypto.so" && \
+  ldconfig
 WORKDIR /
 ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 
