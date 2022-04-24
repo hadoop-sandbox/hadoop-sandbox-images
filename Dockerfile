@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.3
 ARG java_version=8
 
 
@@ -110,15 +111,15 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 ######
 # Build Hadoop
 ######
-RUN install -d "/opt/hadoop-src" && \
+RUN --mount=type=cache,target=/root/.m2 install -d "/opt/hadoop-src" && \
   curl -fsSLo "/opt/hadoop-src.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.2/hadoop-3.3.2-src.tar.gz" && \
   echo "96c7bb6b0205a5f87dea1bad0b09e70017064439552d632d87abad56b0b2a68fccd62dff38132e2a5c3c60f4c6a34cc69cdbed6510b85b193fb7050f35ac05b8 */opt/hadoop-src.tar.gz" | sha512sum -c && \
   tar xzf "/opt/hadoop-src.tar.gz" --strip-components 1 -C "/opt/hadoop-src" && \
   rm "/opt/hadoop-src.tar.gz" && \
   cd "/opt/hadoop-src" && \
   export JAVA_HOME=$(echo /usr/lib/jvm/temurin-8-jdk*) && \
+  mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
-  rm -rf "${HOME}/.m2" && \
   install -d -m 755 -o root -g root "/hadoop" && \
   tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.3.2.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
