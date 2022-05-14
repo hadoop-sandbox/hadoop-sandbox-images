@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -Eeo pipefail
-if ! gosu hdfs hdfs namenode -metadataVersion; then
-   gosu hdfs hdfs namenode -format -nonInteractive
+if ! setpriv --reuid=hdfs --regid=hdfs --init-groups hdfs namenode -metadataVersion; then
+   setpriv --reuid=hdfs --regid=hdfs --init-groups hdfs namenode -format -nonInteractive
 fi
 

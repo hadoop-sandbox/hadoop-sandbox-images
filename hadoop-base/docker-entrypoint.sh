@@ -26,4 +26,8 @@ docker_process_init_files() {
 
 docker_process_init_files docker-entrypoint.d/*
 
-exec "$@"
+export SETPRIV_REUID="${SETPRIV_REUID:-root}"
+export SETPRIV_REGID="${SETPRIV_REGID:-root}"
+export SETPRIV_CAP_OPTS="${SETPRIV_CAP_OPTS:-}"
+
+exec setpriv --reuid="${SETPRIV_REUID}" --regid="${SETPRIV_REGID}" --init-groups ${SETPRIV_CAP_OPTS} -- "$@"
