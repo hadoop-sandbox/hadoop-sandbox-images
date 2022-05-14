@@ -219,7 +219,7 @@ FROM ubuntu:focal AS hadoop-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 libc6-dbg tini gosu && \
+  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 libc6-dbg tini && \
   ARCH="$(dpkg --print-architecture)" && \
   case "${ARCH}" in \
     amd64|i386:x86-64) \
@@ -288,18 +288,20 @@ CMD ["/usr/sbin/sshd", "-D", "-e"]
 
 FROM hadoop-base AS hadoop-hdfs-datanode
 COPY --chown=root:root ./hadoop-hdfs-datanode/docker-entrypoint.d /docker-entrypoint.d
-CMD ["gosu", "hdfs", "hdfs", "datanode"]
+CMD ["hdfs", "datanode"]
 
 FROM hadoop-base AS hadoop-hdfs-namenode
 COPY --chown=root:root ./hadoop-hdfs-namenode/docker-entrypoint.d /docker-entrypoint.d
-CMD ["gosu", "hdfs", "hdfs", "namenode"]
+CMD ["hdfs", "namenode"]
 
 FROM hadoop-base AS hadoop-mapred-jobhistoryserver
 COPY --chown=root:root ./hadoop-mapred-jobhistoryserver/docker-entrypoint.d /docker-entrypoint.d
-CMD ["gosu", "mapred", "mapred", "historyserver"]
+CMD ["mapred", "historyserver"]
 
 FROM hadoop-base AS hadoop-yarn-nodemanager
-CMD ["gosu", "yarn", "yarn", "nodemanager"]
+COPY --chown=root:root ./hadoop-yarn-nodemanager/docker-entrypoint.d /docker-entrypoint.d
+CMD ["yarn", "nodemanager"]
 
 FROM hadoop-base AS hadoop-yarn-resourcemanager
-CMD ["gosu", "yarn", "yarn", "resourcemanager"]
+COPY --chown=root:root ./hadoop-yarn-resourcemanager/docker-entrypoint.d /docker-entrypoint.d
+CMD ["yarn", "resourcemanager"]
