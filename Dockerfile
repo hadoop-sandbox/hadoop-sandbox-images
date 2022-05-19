@@ -92,8 +92,8 @@ RUN echo "Downloading Temurin 11 JDK Debug Symbols" && \
   curl -fsSLo "/dists/openjdk11-debugimage.tar.gz" "${BINARY_URL}" && \
   echo "${ESUM} */dists/openjdk11-debugimage.tar.gz" | sha256sum -c -
 RUN echo "Downloading Hadoop sources" && \
-  curl -fsSLo "/dists/hadoop-src.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.2/hadoop-3.3.2-src.tar.gz" && \
-  echo "96c7bb6b0205a5f87dea1bad0b09e70017064439552d632d87abad56b0b2a68fccd62dff38132e2a5c3c60f4c6a34cc69cdbed6510b85b193fb7050f35ac05b8 */dists/hadoop-src.tar.gz" | sha512sum -c -
+  curl -fsSLo "/dists/hadoop-src.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.3/hadoop-3.3.3-src.tar.gz" && \
+  echo "fd1d45981ffb3fe9f5cf7655b71f084a2552e9cf87998708af5888ec0ecfd90a991958d8946604437581cac61a0bd105c5c1986ed9bea366442d5a8c10b3e04f */dists/hadoop-src.tar.gz" | sha512sum -c -
 
 
 FROM ubuntu:focal AS hadoop-dist
@@ -202,7 +202,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.3.2.tar.gz" --strip-components 1 -C "/hadoop" && \
+  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.3.3.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
   find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \

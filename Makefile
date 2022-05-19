@@ -6,7 +6,7 @@ cache := cache
 docker := docker
 hadoop_major := 3
 hadoop_minor := 3
-hadoop_patch := 2
+hadoop_patch := 3
 
 version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).$(hadoop_minor).$(hadoop_patch)
 
