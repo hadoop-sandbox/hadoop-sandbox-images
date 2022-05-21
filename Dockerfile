@@ -94,6 +94,9 @@ RUN echo "Downloading Temurin 11 JDK Debug Symbols" && \
 RUN echo "Downloading Hadoop sources" && \
   curl -fsSLo "/dists/hadoop-src.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.3/hadoop-3.3.3-src.tar.gz" && \
   echo "fd1d45981ffb3fe9f5cf7655b71f084a2552e9cf87998708af5888ec0ecfd90a991958d8946604437581cac61a0bd105c5c1986ed9bea366442d5a8c10b3e04f */dists/hadoop-src.tar.gz" | sha512sum -c -
+RUN echo "Downloading Hadoop binaries" && \
+  curl -fsSLo "/dists/hadoop.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.3/hadoop-3.3.3.tar.gz" && \
+  echo "1f5762682cef3daff8b2379fe7e40efca107bb7e8dcaa4a513e3bc0c082067759dd05d493ec997433dde2c89ea63dbc93aee0bba60045f89d3ec2d3f687f58b3 */dists/hadoop.tar.gz" | sha512sum -c -
 
 
 FROM ubuntu:focal AS hadoop-dist
@@ -199,21 +202,43 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   tar xzf "/dists/hadoop-src.tar.gz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
   export JAVA_HOME=$(echo /usr/lib/jvm/temurin-8-jdk*) && \
-  mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
-  mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
-  install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.3.3.tar.gz" --strip-components 1 -C "/hadoop" && \
-  chown -R root:root "/hadoop" && \
-  find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
-  find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \
-  find "/hadoop/sbin" -type f -print0 | xargs -r0 chmod 755 && \
-  find "/hadoop/bin" -type f -print0 | xargs -r0 chmod 755 && \
-  find "/hadoop" -type f -name \*.cmd -print0 | xargs -r0 rm && \
-  install -d -o root -g root -m 1777 "/hadoop/logs" && \
-  rm -rf "/hadoop/etc/hadoop" && \
-  rm -rf "/hadoop/share/doc" && \
-  install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
-  rm -rf "/opt/hadoop-src"
+  mvn dependency:go-offline && \
+  mvn package -Pnative -DskipTests -DskipShade -Dmaven.javadoc.skip=true
+
+######
+# Install Hadoop
+######
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d -m 755 -o root -g root "/hadoop" && \
+  tar xzf "/dists/hadoop.tar.gz" --strip-components 1 -C "/hadoop" && \
+  cd /hadoop && \
+  find . -type f -name \*.cmd -delete && \
+  find ./share -type d \( -name jdiff -o -name sources \) -a -prune -a -exec rm -rf \{\} \; && \
+  rm -rf licenses-binary && \
+  rm -rf share/doc && \
+  rm -rf etc/hadoop && \
+  rm LICENSE-binary LICENSE.txt NOTICE-binary NOTICE.txt README.txt && \
+  rm bin/container-executor bin/oom-listener bin/test-container-executor && \
+  rm -rf lib/native && \
+  rm -rf include && \
+  install -d -m 755 -o root -g root lib/native && \
+  install -d -m 755 -o root -g root lib/native/examples && \
+  install -d -m 755 -o root -g root include && \
+  install -d -m 755 -o root -g root etc/hadoop && \
+  cp -a /opt/hadoop-src/hadoop-common-project/hadoop-common/target/native/target/usr/local/lib/* lib/native/ && \
+  cp -a /opt/hadoop-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-nativetask/target/native/target/usr/local/lib/* lib/native/ && \
+  cp -a /opt/hadoop-src/hadoop-hdfs-project/hadoop-hdfs-native-client/target/native/target/usr/local/lib/* lib/native/ && \
+  cp -a /opt/hadoop-src/hadoop-tools/hadoop-pipes/target/native/*.a lib/native/ && \
+  cp -a /opt/hadoop-src/hadoop-tools/hadoop-pipes/target/native/examples/* lib/native/examples/ && \
+  cp -a /opt/hadoop-src/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/target/native/target/usr/local/bin/* bin/ && \
+  cp -a /opt/hadoop-src/hadoop-tools/hadoop-pipes/src/main/native/pipes/api/hadoop/*.hh include/ && \
+  cp -a /opt/hadoop-src/hadoop-hdfs-project/hadoop-hdfs-native-client/target/main/native/libhdfspp/extern/include/hdfs/*.h include/ && \
+  chown -R root:root . && \
+  find . -type d -print0 | xargs -r0 chmod 755 && \
+  find . -type f -print0 | xargs -r0 chmod 644 && \
+  find sbin -type f -print0 | xargs -r0 chmod 755 && \
+  find bin -type f -print0 | xargs -r0 chmod 755 && \
+  install -d -m 1777 -o root -g root logs
+
 
 FROM ubuntu:focal AS hadoop-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
