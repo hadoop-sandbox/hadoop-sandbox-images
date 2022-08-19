@@ -219,7 +219,7 @@ FROM ubuntu:focal AS hadoop-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 libc6-dbg tini && \
+  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 libc6-dbg && \
   ARCH="$(dpkg --print-architecture)" && \
   case "${ARCH}" in \
     amd64|i386:x86-64) \
@@ -273,7 +273,7 @@ RUN useradd -ms /bin/bash sandbox && \
   chown root:root /docker-entrypoint.sh && \
   chmod 755 /docker-entrypoint.sh
 WORKDIR /
-ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 FROM hadoop-base AS hadoop-client
 COPY --chown=root:root ./hadoop-client/docker-entrypoint.d /docker-entrypoint.d
