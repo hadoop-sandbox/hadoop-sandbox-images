@@ -59,12 +59,12 @@ RUN echo "Downloading Temurin 11 JDK Binaries" && \
   ARCH="$(dpkg --print-architecture)" && \
   case "${ARCH}" in \
     aarch64|arm64) \
-      ESUM='bb345cabf3e305ff3ce390918d5f69e5cfbced3d9844e0b0531c2690f9ed06ef' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16%2B8/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.16_8.tar.gz'; \
+      ESUM='2b89cabf0ce1c2cedadd92b798d6e9056bc27c71a06f5ba24ede5dc9c316e3e8' && \
+      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.16.1_1.tar.gz'; \
       ;; \
     amd64|i386:x86-64) \
-      ESUM='f79506f80c796d8e6a382f00bd8c528a330c5e29581aaf5cb61e1831742d166f' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16%2B8/OpenJDK11U-jdk_x64_linux_hotspot_11.0.16_8.tar.gz'; \
+      ESUM='5f6b513757d386352cf91514ed5859d1ab59364b4453e1f1c57152ba2039b8e2' && \
+      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.16.1_1.tar.gz'; \
       ;; \
     *) \
       echo "Unsupported arch: ${ARCH}" && \
@@ -77,12 +77,12 @@ RUN echo "Downloading Temurin 11 JDK Debug Symbols" && \
   ARCH="$(dpkg --print-architecture)" && \
   case "${ARCH}" in \
     aarch64|arm64) \
-      ESUM='b5134b0c53e2a8d79862e668094f691693c93f9ee7cc33a2c9a4b60aa23ad3f9' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16%2B8/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.16_8.tar.gz'; \
+      ESUM='4e1c56456a1095797a99383393bb0f26e961984fe521521de41ef851c72cedc1' && \
+      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.16.1_1.tar.gz'; \
       ;; \
     amd64|i386:x86-64) \
-      ESUM='1d0f63023842269d8b3b239a2f9665edcf132d1c35abf58534f47b66c6c39395'; \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16%2B8/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.16_8.tar.gz'; \
+      ESUM='eb52ccf5502a69a39dad09440569a6a8b2fe0e650440cd0538255c7fa4f6529d'; \
+      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.16.1_1.tar.gz'; \
       ;; \
     *) \
       echo "Unsupported arch: ${ARCH}" && \
