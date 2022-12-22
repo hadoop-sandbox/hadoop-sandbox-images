@@ -1,0 +1,72 @@
+{
+  "jdk.tgz": [
+    {
+      "java": "8",
+      "platform": "linux/arm64",
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_aarch64_linux_hotspot_8u345b01.tar.gz",
+      "checksum": "c1965fb24dded7d7944e2da36cd902adf3b7b1d327aaa21ea507cff00a5a0090"
+    },
+    {
+      "java": "8",
+      "platform": "linux/amd64",
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u345b01.tar.gz",
+      "checksum": "ed6c9db3719895584fb1fd69fc79c29240977675f26631911c5a1dbce07b7d58"
+    },
+    {
+      "java": "11",
+      "platform": "linux/arm64",
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.16.1_1.tar.gz",
+      "checksum": "2b89cabf0ce1c2cedadd92b798d6e9056bc27c71a06f5ba24ede5dc9c316e3e8"
+    },
+    {
+      "java": "11",
+      "platform": "linux/amd64",
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.16.1_1.tar.gz",
+      "checksum": "5f6b513757d386352cf91514ed5859d1ab59364b4453e1f1c57152ba2039b8e2"
+    }
+  ],
+  "jdk-debugimage.tgz": [
+    {
+      "java": "8",
+      "platform": "linux/arm64",
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_aarch64_linux_hotspot_8u345b01.tar.gz",
+      "checksum": "e3dda5480ad45d041713dc6298979b20d97dd34a02fb68d059ee344272d3a77f"
+    },
+    {
+      "java": "8",
+      "platform": "linux/amd64",
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_x64_linux_hotspot_8u345b01.tar.gz",
+      "checksum": "78d2e085a97526ceca4266e5260a84b8dcc9431a6a2074dfe78c224575f6ded6"
+    },
+    {
+      "java": "11",
+      "platform": "linux/arm64",
+      "url": "4e1c56456a1095797a99383393bb0f26e961984fe521521de41ef851c72cedc1",
+      "checksum": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.16.1_1.tar.gz"
+    },
+    {
+      "java": "11",
+      "platform": "linux/amd64",
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.16.1_1.tar.gz",
+      "checksum": "eb52ccf5502a69a39dad09440569a6a8b2fe0e650440cd0538255c7fa4f6529d"
+    }
+  ],
+  "spotbugs.tgz": [
+    {
+      "url": "https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz",
+      "checksum": "4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f"
+    }
+  ],
+  "protobuf-java.tgz": [
+    {
+      "url": "https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protobuf-java-3.7.1.tar.gz",
+      "checksum": "8d1479b233d2c5c68b6c7e22ec9a7bb84d8cfe0b1d9c491377d50c3df80a162f"
+    }
+  ],
+  "hadoop-src.tgz": [
+    {
+      "url": "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4-src.tar.gz",
+      "checksum": "d65dc46d83f137909d645f2a410d27d8e9e57b9162d8c431dff3d2c96f5071c1b7817fcc7c7f07e2400fac198bdbebdbe1a1de99fa988e8eb33e1d280d62cf6d"
+    }
+  ]
+}

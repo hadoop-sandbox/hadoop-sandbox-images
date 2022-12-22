@@ -1,102 +1,22 @@
 # syntax=docker/dockerfile:1.3
 ARG java_version=8
 
-FROM ubuntu:focal AS hadoop-downloads
+FROM ubuntu:jammy AS hadoop-downloads
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates locales && \
+  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates locales jq && \
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
   locale-gen en_US.UTF-8 && \
   rm -rf /var/lib/apt/lists/*
+COPY --chown=root:root ./hadoop-downloads /hadoop-downloads
 RUN install -d /dists
-RUN echo "Downloading spotbugs" && \
-  curl -fsSLo "/dists/spotbugs.tgz" \
-    "https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz" && \
-  echo "4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f */dists/spotbugs.tgz" | sha256sum -c
-RUN echo "Downloading protobuf" && \
-  curl -fsSLo "/dists/protobuf-java.tar.gz" \
-    "https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protobuf-java-3.7.1.tar.gz" && \
-  echo "8d1479b233d2c5c68b6c7e22ec9a7bb84d8cfe0b1d9c491377d50c3df80a162f */dists/protobuf-java.tar.gz" | sha256sum -c
-RUN echo "Downloading Temurin 8 JDK Binaries" && \
-  ARCH="$(dpkg --print-architecture)" && \
-  case "${ARCH}" in \
-    aarch64|arm64) \
-      ESUM='c1965fb24dded7d7944e2da36cd902adf3b7b1d327aaa21ea507cff00a5a0090' && \
-      BINARY_URL='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_aarch64_linux_hotspot_8u345b01.tar.gz'; \
-      ;; \
-    amd64|i386:x86-64) \
-      ESUM='ed6c9db3719895584fb1fd69fc79c29240977675f26631911c5a1dbce07b7d58' && \
-      BINARY_URL='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u345b01.tar.gz'; \
-      ;; \
-    *) \
-      echo "Unsupported arch: ${ARCH}" && \
-      exit 1; \
-      ;; \
-  esac && \
-  curl -fsSLo "/dists/openjdk8.tar.gz" "${BINARY_URL}" && \
-  echo "${ESUM} */dists/openjdk8.tar.gz" | sha256sum -c -
-RUN echo "Downloading Temurin 8 JDK Debug Symbols" && \
-  ARCH="$(dpkg --print-architecture)" && \
-  case "${ARCH}" in \
-    aarch64|arm64) \
-      ESUM='e3dda5480ad45d041713dc6298979b20d97dd34a02fb68d059ee344272d3a77f' && \
-      BINARY_URL='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_aarch64_linux_hotspot_8u345b01.tar.gz'; \
-      ;; \
-    amd64|i386:x86-64) \
-      ESUM='78d2e085a97526ceca4266e5260a84b8dcc9431a6a2074dfe78c224575f6ded6'; \
-      BINARY_URL='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_x64_linux_hotspot_8u345b01.tar.gz'; \
-      ;; \
-    *) \
-      echo "Unsupported arch: ${ARCH}" && \
-      exit 1; \
-      ;; \
-  esac && \
-  curl -fsSLo "/dists/openjdk8-debugimage.tar.gz" "${BINARY_URL}" && \
-  echo "${ESUM} */dists/openjdk8-debugimage.tar.gz" | sha256sum -c -
-RUN echo "Downloading Temurin 11 JDK Binaries" && \
-  ARCH="$(dpkg --print-architecture)" && \
-  case "${ARCH}" in \
-    aarch64|arm64) \
-      ESUM='2b89cabf0ce1c2cedadd92b798d6e9056bc27c71a06f5ba24ede5dc9c316e3e8' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.16.1_1.tar.gz'; \
-      ;; \
-    amd64|i386:x86-64) \
-      ESUM='5f6b513757d386352cf91514ed5859d1ab59364b4453e1f1c57152ba2039b8e2' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.16.1_1.tar.gz'; \
-      ;; \
-    *) \
-      echo "Unsupported arch: ${ARCH}" && \
-      exit 1; \
-      ;; \
-  esac && \
-  curl -fsSLo "/dists/openjdk11.tar.gz" "${BINARY_URL}" && \
-  echo "${ESUM} */dists/openjdk11.tar.gz" | sha256sum -c -
-RUN echo "Downloading Temurin 11 JDK Debug Symbols" && \
-  ARCH="$(dpkg --print-architecture)" && \
-  case "${ARCH}" in \
-    aarch64|arm64) \
-      ESUM='4e1c56456a1095797a99383393bb0f26e961984fe521521de41ef851c72cedc1' && \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.16.1_1.tar.gz'; \
-      ;; \
-    amd64|i386:x86-64) \
-      ESUM='eb52ccf5502a69a39dad09440569a6a8b2fe0e650440cd0538255c7fa4f6529d'; \
-      BINARY_URL='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.16.1_1.tar.gz'; \
-      ;; \
-    *) \
-      echo "Unsupported arch: ${ARCH}" && \
-      exit 1; \
-      ;; \
-  esac && \
-  curl -fsSLo "/dists/openjdk11-debugimage.tar.gz" "${BINARY_URL}" && \
-  echo "${ESUM} */dists/openjdk11-debugimage.tar.gz" | sha256sum -c -
-RUN echo "Downloading Hadoop sources" && \
-  curl -fsSLo "/dists/hadoop-src.tar.gz" "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4-src.tar.gz" && \
-  echo "d65dc46d83f137909d645f2a410d27d8e9e57b9162d8c431dff3d2c96f5071c1b7817fcc7c7f07e2400fac198bdbebdbe1a1de99fa988e8eb33e1d280d62cf6d */dists/hadoop-src.tar.gz" | sha512sum -c -
+ARG TARGETPLATFORM
+ARG java_version=8
+RUN /hadoop-downloads/download.sh -d /dists -p "$TARGETPLATFORM" -j "$java_version" /hadoop-downloads/deps.json
 
-
-FROM ubuntu:focal AS hadoop-dist
+FROM ubuntu:jammy AS hadoop-dist
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /root
 ENV DEBIAN_FRONTEND="noninteractive" \
@@ -170,8 +90,10 @@ RUN python3 -m pip install --no-cache-dir pylint==2.6.0 python-dateutil==2.8.1
 #######
 # Install SpotBugs 4.2.2
 #######
+ARG TARGETPLATFORM
+ARG java_version=8
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/opt/spotbugs" && \
-  tar xzf "/dists/spotbugs.tgz" --strip-components 1 -C "/opt/spotbugs" && \
+  tar xzf "/dists/$java_version/$TARGETPLATFORM/spotbugs.tgz" --strip-components 1 -C "/opt/spotbugs" && \
   chown -R root:root /opt/spotbugs && \
   find /opt/spotbugs -type d -print0 | xargs -r0 chmod 755 && \
   find /opt/spotbugs -type f -print0 | xargs -r0 chmod 644 && \
@@ -183,7 +105,7 @@ ENV SPOTBUGS_HOME="/opt/spotbugs"
 # Install Google Protobuf 3.7.1 (3.6.1 ships with Focal)
 ######
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/protobuf-src" && \
-  tar xzf "/dists/protobuf-java.tar.gz" --strip-components 1 -C "/opt/protobuf-src" && \
+  tar xzf "/dists/$java_version/$TARGETPLATFORM/protobuf-java.tgz" --strip-components 1 -C "/opt/protobuf-src" && \
   cd /opt/protobuf-src && \
   ./configure --prefix="/opt/protobuf" && \
   make -j$(nproc) && \
@@ -195,9 +117,13 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 ######
 # Build Hadoop
 ######
+COPY ./hadoop-dist/patches /patches
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/hadoop-src" && \
-  tar xzf "/dists/hadoop-src.tar.gz" --strip-components 1 -C "/opt/hadoop-src" && \
+  tar xzf "/dists/$java_version/$TARGETPLATFORM/hadoop-src.tgz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
+  for patch in /patches/*; do \
+    patch -p1 < "$patch"; \
+  done && \
   export JAVA_HOME=$(echo /usr/lib/jvm/temurin-8-jdk*) && \
   mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
@@ -215,14 +141,14 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
   rm -rf "/opt/hadoop-src"
 
-FROM ubuntu:focal AS hadoop-base
+FROM ubuntu:jammy AS hadoop-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+ARG TARGETPLATFORM
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl1.1 libc6-dbg && \
-  ARCH="$(dpkg --print-architecture)" && \
-  case "${ARCH}" in \
-    amd64|i386:x86-64) \
+  DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends tzdata curl ca-certificates fontconfig locales libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl3 libc6-dbg && \
+  case "${TARGETPLATFORM}" in \
+    linux/amd64) \
       DEBIAN_FRONTEND=noninteractive apt-get -q install --yes --no-upgrade --no-install-recommends libisal2; \
       ;; \
     *) \
@@ -233,24 +159,12 @@ RUN apt-get -q update && \
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
   locale-gen en_US.UTF-8 && \
   rm -rf /var/lib/apt/lists/* && \
-  ln -s libcrypto.so.1.1 "/usr/lib/$(uname -m)-linux-gnu/libcrypto.so" && \
+  ln -s libcrypto.so.3 "/usr/lib/$(uname -m)-linux-gnu/libcrypto.so" && \
   ldconfig
 ARG java_version=8
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists set -eux; \
-    case "${java_version}" in \
-       8) \
-         BINARY_DIST='/dists/openjdk8.tar.gz' && \
-         DEBUG_DIST='/dists/openjdk8-debugimage.tar.gz'; \
-         ;; \
-       11) \
-         BINARY_DIST='/dists/openjdk11.tar.gz' && \
-         DEBUG_DIST='/dists/openjdk11-debugimage.tar.gz'; \
-         ;; \
-       *) \
-         echo "Unsupported java version: ${java_version}"; \
-         exit 1; \
-         ;; \
-    esac && \
+    BINARY_DIST="/dists/$java_version/$TARGETPLATFORM/jdk.tgz" && \
+    DEBUG_DIST="/dists/$java_version/$TARGETPLATFORM/jdk-debugimage.tgz"; \
     install -d /opt/java/openjdk && \
     tar xzf "${BINARY_DIST}" --strip-components=1 -C '/opt/java/openjdk' && \
     tar xzf "${DEBUG_DIST}" --strip-components=2 -C '/opt/java/openjdk'

@@ -1,0 +1,53 @@
+diff -urN hadoop-3.3.4-src.orig/hadoop-common-project/hadoop-common/src/main/native/src/org/apache/hadoop/crypto/OpensslCipher.c hadoop-3.3.4-src/hadoop-common-project/hadoop-common/src/main/native/src/org/apache/hadoop/crypto/OpensslCipher.c
+--- hadoop-3.3.4-src.orig/hadoop-common-project/hadoop-common/src/main/native/src/org/apache/hadoop/crypto/OpensslCipher.c	2022-05-09 18:24:14.000000000 +0200
++++ hadoop-3.3.4-src/hadoop-common-project/hadoop-common/src/main/native/src/org/apache/hadoop/crypto/OpensslCipher.c	2022-12-22 05:31:51.753006334 +0100
+@@ -141,12 +141,22 @@
+                       "EVP_CIPHER_CTX_set_padding");
+   LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CIPHER_CTX_test_flags, env, openssl,  \
+                       "EVP_CIPHER_CTX_test_flags");
++#if OPENSSL_VERSION_NUMBER >= 0x30000000L
++  LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CIPHER_CTX_block_size, env, openssl,  \
++                      "EVP_CIPHER_CTX_get_block_size");
++#else
+   LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CIPHER_CTX_block_size, env, openssl,  \
+                       "EVP_CIPHER_CTX_block_size");
++#endif
+ #if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#if OPENSSL_VERSION_NUMBER >= 0x30000000L
++  LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CIPHER_CTX_encrypting, env, openssl,  \
++                      "EVP_CIPHER_CTX_is_encrypting");
++#else
+   LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CIPHER_CTX_encrypting, env, openssl,  \
+                       "EVP_CIPHER_CTX_encrypting");
+ #endif
++#endif
+   LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CipherInit_ex, env, openssl,  \
+                       "EVP_CipherInit_ex");
+   LOAD_DYNAMIC_SYMBOL(dlsym_EVP_CipherUpdate, env, openssl,  \
+@@ -171,14 +181,26 @@
+   LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CIPHER_CTX_test_flags,  \
+                       dlsym_EVP_CIPHER_CTX_test_flags, env,  \
+                       openssl, "EVP_CIPHER_CTX_test_flags");
++#if OPENSSL_VERSION_NUMBER >= 0x30000000L
++  LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CIPHER_CTX_block_size,  \
++                      dlsym_EVP_CIPHER_CTX_block_size, env,  \
++                      openssl, "EVP_CIPHER_CTX_get_block_size");
++#else
+   LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CIPHER_CTX_block_size,  \
+                       dlsym_EVP_CIPHER_CTX_block_size, env,  \
+                       openssl, "EVP_CIPHER_CTX_block_size");
++#endif
+ #if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#if OPENSSL_VERSION_NUMBER >= 0x30000000L
++  LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CIPHER_CTX_encrypting,  \
++                      dlsym_EVP_CIPHER_CTX_encrypting, env,  \
++                      openssl, "EVP_CIPHER_CTX_is_encrypting");
++#else
+   LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CIPHER_CTX_encrypting,  \
+                       dlsym_EVP_CIPHER_CTX_encrypting, env,  \
+                       openssl, "EVP_CIPHER_CTX_encrypting");
+ #endif
++#endif
+   LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CipherInit_ex, dlsym_EVP_CipherInit_ex,  \
+                       env, openssl, "EVP_CipherInit_ex");
+   LOAD_DYNAMIC_SYMBOL(__dlsym_EVP_CipherUpdate, dlsym_EVP_CipherUpdate,  \
