@@ -12,23 +12,11 @@ set -- $args
 
 json=
 dest=
-java=
-platform=
 
 while :; do
   case "$1" in
   -d)
     dest="$2"
-    shift
-    shift
-    ;;
-  -j)
-    java="$2"
-    shift
-    shift
-    ;;
-  -p)
-    platform="$2"
     shift
     shift
     ;;
@@ -52,17 +40,13 @@ json=$1
 
 [ -z "$json" ] && bail_out 4 "dependency file argument empty"
 [ -z "$dest" ] && bail_out 5 "dest argument empty"
-[ -z "$java" ] && bail_out 6 "java argument empty"
-[ -z "$platform" ] && bail_out 7 "platform argument empty"
 
-echo "json: $json, dest: $dest, java: $java, platform: $platform"
+echo "json: $json, dest: $dest"
 
 function fetch_source() {
   dep="$1"
-  java="$2"
-  platform="$3"
-  json="$4"
-  jq -c ".[\"$dep\"] | map((select(.java == \"$java\") | select(.platform == \"$platform\")), (select(.java == null) | select(.platform == null))) | (if length != 1 then halt_error(1) else . end)[0]" "$json"
+  json="$2"
+  jq -c ".[\"$dep\"] | (if length != 1 then halt_error(1) else . end)[0]" "$json"
 }
 
 function extract_prop() {
@@ -85,7 +69,9 @@ function download() {
     filepath="$1"
     url="$2"
     checksum="$3"
-    cksumcmd="$4"
+
+    cksumcmd=$(determine_checksum_command "$checksum")
+    [ -z "$cksumcmd" ] && return 1
 
     destdir=$(dirname "$filepath")
     install -d -m 755 "$destdir"
@@ -98,13 +84,11 @@ function download() {
 
 for dependency in $(jq -r '. | keys[]' "$json"); do
   echo "Downloading $dependency"
-  source=$(fetch_source "$dependency" "$java" "$platform" "$json")
+  source=$(fetch_source "$dependency" "$json")
   url=$(extract_prop "$source" "url")
   checksum=$(extract_prop "$source" "checksum")
-  cksumcmd=$(determine_checksum_command "$checksum")
-  [ -z "$cksumcmd" ] && bail_out 8 "unknown checksum algorithm for $dependency"
-  filepath="$dest/$java/$platform/$dependency"
-  download "$filepath" "$url" "$checksum" "$cksumcmd"
+  filepath="$dest/$dependency"
+  download "$filepath" "$url" "$checksum"
   rc=$?
   case "$rc" in
   0)
@@ -113,6 +97,3 @@ for dependency in $(jq -r '. | keys[]' "$json"); do
     bail_out 9 "download failed for $dependency (url: $url)";;
   esac
 done
-
-# doc fetch:
-# jq '.["jdk.tgz"] | map((select(.java == "8") | select(.platform == "linux/amd64")), (select(.java == null) | select(.platform == null))) | (if length != 1 then halt_error(1) else . end)[0]' deps.json

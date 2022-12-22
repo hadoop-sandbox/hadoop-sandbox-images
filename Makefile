@@ -1,5 +1,6 @@
 java_version := 8
 default_java_version := 8
+docker_reg :=
 docker_org := packet23
 platforms := linux/amd64,linux/arm64
 cache := cache
@@ -72,7 +73,7 @@ ifeq ($(java_version),$(default_java_version))
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
-		$(foreach tag,$(tags_default), --tag "$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
+		$(foreach tag,$(tags_default), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
 		--push . && \
 	touch "$@"
 else
@@ -82,7 +83,7 @@ else
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
-		$(foreach tag,$(tags_always), --tag "$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
+		$(foreach tag,$(tags_always), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
 		--push . && \
 	touch "$@"
 endif
