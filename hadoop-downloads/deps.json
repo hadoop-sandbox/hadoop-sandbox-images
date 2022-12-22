@@ -3,52 +3,52 @@
     {
       "java": "8",
       "platform": "linux/arm64",
-      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_aarch64_linux_hotspot_8u345b01.tar.gz",
-      "checksum": "c1965fb24dded7d7944e2da36cd902adf3b7b1d327aaa21ea507cff00a5a0090"
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u352-b08/OpenJDK8U-jdk_aarch64_linux_hotspot_8u352b08.tar.gz",
+      "checksum": "a70768968bbcccccf977f036e87e545c3b080ed6c44072a01e9dadb94051c454"
     },
     {
       "java": "8",
       "platform": "linux/amd64",
-      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u345b01.tar.gz",
-      "checksum": "ed6c9db3719895584fb1fd69fc79c29240977675f26631911c5a1dbce07b7d58"
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u352-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u352b08.tar.gz",
+      "checksum": "1633bd7590cb1cd72f5a1378ae8294451028b274d798e2a4ac672059a2f00fee"
     },
     {
       "java": "11",
       "platform": "linux/arm64",
-      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.16.1_1.tar.gz",
-      "checksum": "2b89cabf0ce1c2cedadd92b798d6e9056bc27c71a06f5ba24ede5dc9c316e3e8"
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.17_8.tar.gz",
+      "checksum": "d18b5dd73fce9edd5c58f623a1173f9ee2d45023836b8753b96beae51673a432"
     },
     {
       "java": "11",
       "platform": "linux/amd64",
-      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.16.1_1.tar.gz",
-      "checksum": "5f6b513757d386352cf91514ed5859d1ab59364b4453e1f1c57152ba2039b8e2"
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/OpenJDK11U-jdk_x64_linux_hotspot_11.0.17_8.tar.gz",
+      "checksum": "b8d46ed08ef4859476fe6421a7690d899ed83dce63f13fd894f994043177ef3c"
     }
   ],
   "jdk-debugimage.tgz": [
     {
       "java": "8",
       "platform": "linux/arm64",
-      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_aarch64_linux_hotspot_8u345b01.tar.gz",
-      "checksum": "e3dda5480ad45d041713dc6298979b20d97dd34a02fb68d059ee344272d3a77f"
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u352-b08/OpenJDK8U-debugimage_aarch64_linux_hotspot_8u352b08.tar.gz",
+      "checksum": "bb0b31c9c61099fcbded1fa3f0a17e04bd94a783d95c803da8c0337ef200c2ab"
     },
     {
       "java": "8",
       "platform": "linux/amd64",
-      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-debugimage_x64_linux_hotspot_8u345b01.tar.gz",
-      "checksum": "78d2e085a97526ceca4266e5260a84b8dcc9431a6a2074dfe78c224575f6ded6"
+      "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u352-b08/OpenJDK8U-debugimage_x64_linux_hotspot_8u352b08.tar.gz",
+      "checksum": "6daa54c152611f7be069783eb1e8187b03cf6cd2ad8f8c72fc4eb0eba0e970e3"
     },
     {
       "java": "11",
       "platform": "linux/arm64",
-      "url": "4e1c56456a1095797a99383393bb0f26e961984fe521521de41ef851c72cedc1",
-      "checksum": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.16.1_1.tar.gz"
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/OpenJDK11U-debugimage_aarch64_linux_hotspot_11.0.17_8.tar.gz",
+      "checksum": "6796fef225f1a2fbdac4378eac1813e8c18863f9f769b496be86903a5fc3d68c"
     },
     {
       "java": "11",
       "platform": "linux/amd64",
-      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.16.1%2B1/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.16.1_1.tar.gz",
-      "checksum": "eb52ccf5502a69a39dad09440569a6a8b2fe0e650440cd0538255c7fa4f6529d"
+      "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.17_8.tar.gz",
+      "checksum": "e35694877a55109de2ee92dc3f5e1d6429a892cf0a143badf2500e7ebdc31719"
     }
   ],
   "spotbugs.tgz": [
