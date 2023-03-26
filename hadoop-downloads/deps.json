@@ -13,8 +13,8 @@
   ],
   "hadoop-src.tgz": [
     {
-      "url": "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4-src.tar.gz",
-      "checksum": "d65dc46d83f137909d645f2a410d27d8e9e57b9162d8c431dff3d2c96f5071c1b7817fcc7c7f07e2400fac198bdbebdbe1a1de99fa988e8eb33e1d280d62cf6d"
+      "url": "https://dlcdn.apache.org/hadoop/common/hadoop-3.3.5/hadoop-3.3.5-src.tar.gz",
+      "checksum": "758f6a6b8fddb53ab56d8d4a10a1ee3dddc5f104c072c1749e8769d2c4f4c1c3a4ecfba9aa905dfce7e780ffdf3374d63ff2e7fad596753e7d9c0bab0f88f483"
     }
   ]
 }
