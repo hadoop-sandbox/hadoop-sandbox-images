@@ -1,13 +1,13 @@
-java_version := 8
-default_java_version := 8
+java_version := 11
+default_java_version := 11
 docker_reg :=
 docker_org := packet23
 platforms := linux/amd64,linux/arm64
 cache := cache
 docker := docker
 hadoop_major := 3
-hadoop_minor := 3
-hadoop_patch := 6
+hadoop_minor := 4
+hadoop_patch := 0
 
 version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).$(hadoop_minor).$(hadoop_patch)
 
