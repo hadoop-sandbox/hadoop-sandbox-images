@@ -38,13 +38,11 @@ all: $(base_image_iid) $(images_iid)
 push: $(images_push)
 
 clean:
-	$(RM) -r "$(cache)" && \
 	$(RM) *.iid *.push
 
 $(dist_image_iid): Dockerfile
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
+		--no-cache \
 		--iidfile "$@" \
 		--platform "$(platforms)" \
 		--output type=image \
@@ -53,8 +51,7 @@ $(dist_image_iid): Dockerfile
 
 %.iid: Dockerfile
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
+		--no-cache \
 		--build-arg java_version="$(java_version)" \
 		--iidfile "$@" \
 		--platform "$(platforms)" \
@@ -68,8 +65,7 @@ $(images_iid): $(base_image_iid)
 %.push: %.iid
 ifeq ($(java_version),$(default_java_version))
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
+		--no-cache \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
@@ -78,8 +74,7 @@ ifeq ($(java_version),$(default_java_version))
 	touch "$@"
 else
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
+		--no-cache \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
