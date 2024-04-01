@@ -9,9 +9,6 @@ on:
 jobs:
   build_images:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java_version: [11]
     steps:
       -
         name: Checkout
@@ -24,4 +21,4 @@ jobs:
         uses: docker/setup-buildx-action@v3
       -
         name: Build sandbox images
-        run: make all java_version=${{ matrix.java_version }} docker_org=${{ secrets.DOCKERHUB_USERNAME }} cache=/tmp/.buildx-cache
+        run: make all docker_org=${{ secrets.DOCKERHUB_USERNAME }}
