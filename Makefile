@@ -1,13 +1,13 @@
-java_version := 8
-default_java_version := 8
+java_version := 11
+default_java_version := 11
 docker_reg :=
 docker_org := packet23
 platforms := linux/amd64,linux/arm64
 cache := cache
 docker := docker
 hadoop_major := 3
-hadoop_minor := 3
-hadoop_patch := 6
+hadoop_minor := 4
+hadoop_patch := 0
 
 version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).$(hadoop_minor).$(hadoop_patch)
 
@@ -38,13 +38,10 @@ all: $(base_image_iid) $(images_iid)
 push: $(images_push)
 
 clean:
-	$(RM) -r "$(cache)" && \
 	$(RM) *.iid *.push
 
 $(dist_image_iid): Dockerfile
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
 		--iidfile "$@" \
 		--platform "$(platforms)" \
 		--output type=image \
@@ -53,8 +50,6 @@ $(dist_image_iid): Dockerfile
 
 %.iid: Dockerfile
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--iidfile "$@" \
 		--platform "$(platforms)" \
@@ -68,8 +63,6 @@ $(images_iid): $(base_image_iid)
 %.push: %.iid
 ifeq ($(java_version),$(default_java_version))
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \
@@ -78,8 +71,6 @@ ifeq ($(java_version),$(default_java_version))
 	touch "$@"
 else
 	$(docker) buildx build \
-		--cache-from "type=local,src=$(cache)" \
-		--cache-to "type=local,dest=$(cache)" \
 		--build-arg java_version="$(java_version)" \
 		--platform "$(platforms)" \
 		--target "$(subst -java-$(java_version).push,,$@)" \

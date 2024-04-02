@@ -7,42 +7,8 @@ on:
      - main
 
 jobs:
-  build_dist:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Cache Buildx layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: buildx-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            buildx-${{ runner.os }}
-      -
-        name: Build Hadoop dist
-        run: make hadoop-dist.iid cache=/tmp/.buildx-cache
-      -
-        name: Upload Dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: hadoop-dist
-          path: /tmp/.buildx-cache
-          if-no-files-found: error
   build_images:
-    needs: [build_dist]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java_version: [8, 11]
     steps:
       -
         name: Checkout
@@ -54,11 +20,5 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Download Dist
-        uses: actions/download-artifact@v4
-        with:
-          name: hadoop-dist
-          path: /tmp/.buildx-cache
-      -
         name: Build sandbox images
-        run: make all java_version=${{ matrix.java_version }} docker_org=${{ secrets.DOCKERHUB_USERNAME }} cache=/tmp/.buildx-cache
+        run: make all docker_org=${{ secrets.DOCKERHUB_USERNAME }}

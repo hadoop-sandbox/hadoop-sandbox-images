@@ -1,4 +1,9 @@
-# syntax=docker/dockerfile:1.3
+# syntax=docker/dockerfile:1
+FROM scratch AS hadoop-downloads
+ADD --checksum=sha256:be20c5dcb7510991ea17270e61f37b9d44013c788c0888e6bbb8e020069a2bd1 https://dlcdn.apache.org/hadoop/common/hadoop-3.4.0/hadoop-3.4.0-src.tar.gz /dists//hadoop-src.tgz
+ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
+ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
+
 FROM ubuntu:jammy AS base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /root
@@ -11,14 +16,6 @@ RUN echo -e "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";" > /et
   locale-gen en_US.UTF-8 && \
   ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
-
-FROM base AS hadoop-downloads
-RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests curl ca-certificates jq && \
-  rm -rf /var/lib/apt/lists/*
-COPY --chown=root:root ./hadoop-downloads /hadoop-downloads
-RUN install -d /dists
-RUN /hadoop-downloads/download.sh -d /dists /hadoop-downloads/deps.json
 
 FROM base AS hadoop-dist
 ENV DEBIAN_FRONTEND="noninteractive" \
@@ -39,50 +36,61 @@ ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-$TARGETARCH"
 ARG TARGETPLATFORM
 RUN apt-get -q update && \
   apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests \
+    ant \
     apt-utils \
+    automake \
     bats \
     build-essential \
     bzip2 \
+    libbz2-dev \
     clang \
     cmake \
     curl \
+    libcurl4-openssl-dev \
     doxygen \
     fuse \
-    g++ \
+    libfuse-dev \
     gcc \
+    g++ \
     git \
     gnupg-agent \
-    libbz2-dev \
-    libcurl4-openssl-dev \
-    libfuse-dev \
+    hugo \
+    libbcprov-java \
+    libtool \
+    libssl-dev \
+    libprotobuf-dev \
+    libprotoc-dev \
     libsasl2-dev \
     libsnappy-dev \
-    libssl-dev \
-    libtool \
     libzstd-dev \
+    zlib1g-dev \
+    libboost-dev \
+    libboost-date-time-dev \
+    libboost-program-options-dev \
     locales \
     make \
+    maven \
+    pinentry-curses \
     pkg-config \
     python3 \
     python3-pip \
     python3-pkg-resources \
     python3-setuptools \
     python3-wheel \
+    rsync \
     shellcheck \
-    zlib1g-dev \
-    maven \
-    libbcprov-java && \
+    software-properties-common \
+    sudo \
+    valgrind \
+    yasm \
+    python3 \
+    pylint \
+    python3-dateutil && \
   if [ "$TARGETPLATFORM" == "linux/amd64" ]; then apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests libisal-dev ; fi && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 ENV PYTHONIOENCODING="utf-8" \
   MAVEN_OPTS="-Xms256m -Xmx1536m"
-
-
-#######
-# Install python dependencies
-#######
-RUN python3 -m pip install --no-cache-dir pylint==2.6.0 python-dateutil==2.8.1
 
 
 #######
@@ -98,10 +106,10 @@ ENV SPOTBUGS_HOME="/opt/spotbugs"
 
 
 ######
-# Install Google Protobuf 3.7.1 (3.6.1 ships with Focal)
+# Install Google Protobuf 21.12
 ######
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/protobuf-src" && \
-  tar xzf "/dists/protobuf-java.tgz" --strip-components 1 -C "/opt/protobuf-src" && \
+  tar xzf "/dists/protobuf.tgz" --strip-components 1 -C "/opt/protobuf-src" && \
   cd /opt/protobuf-src && \
   ./configure --prefix="/opt/protobuf" && \
   make -j$(nproc) && \
@@ -124,7 +132,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.3.6.tar.gz" --strip-components 1 -C "/hadoop" && \
+  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.0.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
   find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \
