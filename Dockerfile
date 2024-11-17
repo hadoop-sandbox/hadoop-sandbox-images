@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM scratch AS hadoop-downloads
-ADD --checksum=sha256:be20c5dcb7510991ea17270e61f37b9d44013c788c0888e6bbb8e020069a2bd1 https://dlcdn.apache.org/hadoop/common/hadoop-3.4.0/hadoop-3.4.0-src.tar.gz /dists//hadoop-src.tgz
+ADD --checksum=sha256:944f6e4a8872e86597a6b14461b1229f6213a939acda1e845977b89c47775386 https://dlcdn.apache.org/hadoop/common/hadoop-3.4.1/hadoop-3.4.1-src.tar.gz /dists//hadoop-src.tgz
 ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
 ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
 
@@ -132,7 +132,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.0.tar.gz" --strip-components 1 -C "/hadoop" && \
+  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.1.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
   find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \
