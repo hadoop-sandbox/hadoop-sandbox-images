@@ -1,0 +1,316 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+   branches:
+     - main
+  schedule:
+    - cron: '0 0 * * 6'
+  push:
+    branches:
+      - main
+
+env:
+  SOURCE_DATE_EPOCH: 0
+  DOCKER_BUILD_SUMMARY: false
+
+jobs:
+  build_images:
+    runs-on: ${{ matrix.os }}
+    outputs:
+      digest_hadoop_base_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_base_java_11_amd64 }}
+      digest_hadoop_client_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_client_java_11_amd64 }}
+      digest_hadoop_hdfs_datanode_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_java_11_amd64 }}
+      digest_hadoop_hdfs_namenode_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_java_11_amd64 }}
+      digest_hadoop_mapred_jobhistoryserver_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_amd64 }}
+      digest_hadoop_yarn_resourcemanager_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_java_11_amd64 }}
+      digest_hadoop_yarn_nodemanager_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_java_11_amd64 }}
+      digest_hadoop_base_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_base_java_11_arm64 }}
+      digest_hadoop_client_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_java_11_arm64 }}
+      digest_hadoop_hdfs_datanode_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_java_11_arm64 }}
+      digest_hadoop_hdfs_namenode_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_java_11_arm64 }}
+      digest_hadoop_mapred_jobhistoryserver_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_arm64 }}
+      digest_hadoop_yarn_resourcemanager_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_java_11_arm64 }}
+      digest_hadoop_yarn_nodemanager_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_java_11_arm64 }}
+
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            arch: amd64
+            java_version: "11"
+          - os: ubuntu-24.04-arm
+            arch: arm64
+            java_version: "11"
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build hadoop-base
+        id: hadoop_base
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-base
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-client
+        id: hadoop_client
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-client
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-hdfs-datanode
+        id: hadoop_hdfs_datanode
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-hdfs-datanode
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-hdfs-namenode
+        id: hadoop_hdfs_namenode
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-hdfs-namenode
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-mapred-jobhistoryserver
+        id: hadoop_mapred_jobhistoryserver
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-mapred-jobhistoryserver
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-yarn-resourcemanager
+        id: hadoop_yarn_resourcemanager
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-yarn-resourcemanager
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-yarn-nodemanager
+        id: hadoop_yarn_nodemanager
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-yarn-nodemanager
+          build-args: java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Publish image digests
+        id: publish_digest
+        run: |
+          arch="${{ matrix.arch }}"
+          java_version="${{ matrix.java_version }}"
+
+          digest_hadoop_base="${{ steps.hadoop_base.outputs.digest }}" 
+          echo "digest_hadoop_base_${java_version}_${arch}=${digest_hadoop_base}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_client="${{ steps.hadoop_client.outputs.digest }}" 
+          echo "digest_hadoop_client_${java_version}_${arch}=${digest_hadoop_client}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_hdfs_datanode="${{ steps.hadoop_hdfs_datanode.outputs.digest }}" 
+          echo "digest_hadoop_hdfs_datanode_${java_version}_${arch}=${digest_hadoop_hdfs_datanode}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_hdfs_namenode="${{ steps.hadoop_hdfs_namenode.outputs.digest }}" 
+          echo "digest_hadoop_hdfs_namenode_${java_version}_${arch}=${digest_hadoop_hdfs_namenode}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_mapred_jobhistoryserver="${{ steps.hadoop_mapred_jobhistoryserver.outputs.digest }}" 
+          echo "digest_hadoop_mapred_jobhistoryserver_${java_version}_${arch}=${digest_hadoop_mapred_jobhistoryserver}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_yarn_resourcemanager="${{ steps.hadoop_yarn_resourcemanager.outputs.digest }}" 
+          echo "digest_hadoop_yarn_resourcemanager_${java_version}_${arch}=${digest_hadoop_yarn_resourcemanager}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_yarn_nodemanager="${{ steps.hadoop_yarn_nodemanager.outputs.digest }}" 
+          echo "digest_hadoop_yarn_nodemanager_${java_version}_${arch}=${digest_hadoop_yarn_nodemanager}" >> "$GITHUB_OUTPUT"
+
+  build_manifests:
+    runs-on: ubuntu-24.04
+    needs: [build_images]
+    if: github.event_name != 'pull_request'
+    steps:
+      -
+        name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Create and push hadoop-base manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-client manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-hdfs-datanode manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-hdfs-namenode manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-mapred-jobhistoryserver manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-yarn-resourcemanager manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_java_11_arm64 }}"
+      -
+        name: Create and push hadoop-yarn-nodemanager manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_java_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_java_11_arm64 }}"
