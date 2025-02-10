@@ -19,28 +19,28 @@ jobs:
   build_images:
     runs-on: ${{ matrix.os }}
     outputs:
-      digest_hadoop_base_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_base_java_11_amd64 }}
-      digest_hadoop_client_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_client_java_11_amd64 }}
-      digest_hadoop_hdfs_datanode_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_java_11_amd64 }}
-      digest_hadoop_hdfs_namenode_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_java_11_amd64 }}
-      digest_hadoop_mapred_jobhistoryserver_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_amd64 }}
-      digest_hadoop_yarn_resourcemanager_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_java_11_amd64 }}
-      digest_hadoop_yarn_nodemanager_java_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_java_11_amd64 }}
-      digest_hadoop_base_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_base_java_11_arm64 }}
-      digest_hadoop_client_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_java_11_arm64 }}
-      digest_hadoop_hdfs_datanode_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_java_11_arm64 }}
-      digest_hadoop_hdfs_namenode_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_java_11_arm64 }}
-      digest_hadoop_mapred_jobhistoryserver_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_arm64 }}
-      digest_hadoop_yarn_resourcemanager_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_java_11_arm64 }}
-      digest_hadoop_yarn_nodemanager_java_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_java_11_arm64 }}
+      digest_hadoop_base_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_base_11_amd64 }}
+      digest_hadoop_client_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_client_11_amd64 }}
+      digest_hadoop_hdfs_datanode_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}
+      digest_hadoop_hdfs_namenode_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}
+      digest_hadoop_mapred_jobhistoryserver_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}
+      digest_hadoop_yarn_resourcemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}
+      digest_hadoop_yarn_nodemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}
+      digest_hadoop_base_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_base_11_arm64 }}
+      digest_hadoop_client_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_11_arm64 }}
+      digest_hadoop_hdfs_datanode_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}
+      digest_hadoop_hdfs_namenode_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}
+      digest_hadoop_mapred_jobhistoryserver_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}
+      digest_hadoop_yarn_resourcemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}
+      digest_hadoop_yarn_nodemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}
 
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: amd64
             java_version: "11"
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: arm64
             java_version: "11"
     steps:
@@ -228,8 +228,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
         name: Create and push hadoop-client manifest
         if: github.event_name != 'pull_request'
@@ -242,8 +242,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
         name: Create and push hadoop-hdfs-datanode manifest
         if: github.event_name != 'pull_request'
@@ -256,8 +256,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
       -
         name: Create and push hadoop-hdfs-namenode manifest
         if: github.event_name != 'pull_request'
@@ -270,8 +270,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
       -
         name: Create and push hadoop-mapred-jobhistoryserver manifest
         if: github.event_name != 'pull_request'
@@ -284,8 +284,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
       -
         name: Create and push hadoop-yarn-resourcemanager manifest
         if: github.event_name != 'pull_request'
@@ -298,8 +298,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
       -
         name: Create and push hadoop-yarn-nodemanager manifest
         if: github.event_name != 'pull_request'
@@ -312,5 +312,5 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_java_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_java_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
