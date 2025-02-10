@@ -129,7 +129,6 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
     patch -p1 < "$patch"; \
   done && \
   echo "JAVA_HOME: $JAVA_HOME" && \
-  mvn dependency:go-offline -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
   tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.1.tar.gz" --strip-components 1 -C "/hadoop" && \
