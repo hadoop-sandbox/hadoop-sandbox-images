@@ -1,5 +1,3 @@
-[![CI to Docker Hub](https://github.com/hadoop-sandbox/hadoop-sandbox-images/actions/workflows/main.yml/badge.svg)](https://github.com/hadoop-sandbox/hadoop-sandbox-images/actions/workflows/main.yml)
-
 # Hadoop Sandbox Image
 
 Docker images for the [Hadoop Sandbox](https://github.com/hadoop-sandbox/hadoop-sandbox) project.
