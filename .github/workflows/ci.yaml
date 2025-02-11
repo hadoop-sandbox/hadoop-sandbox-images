@@ -228,8 +228,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
         name: Create and push hadoop-client manifest
         if: github.event_name != 'pull_request'
@@ -242,8 +242,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-11" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
-              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@sha256:${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
         name: Create and push hadoop-hdfs-datanode manifest
         if: github.event_name != 'pull_request'
