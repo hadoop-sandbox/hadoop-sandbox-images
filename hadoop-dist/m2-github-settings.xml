@@ -1,0 +1,29 @@
+<settings>
+    <mirrors>
+        <mirror>
+            <id>github</id>
+            <mirrorOf>central</mirrorOf>
+            <url>https://maven.pkg.github.com/hadoop-sandbox/hadoop-sandbox-images</url>
+        </mirror>
+    </mirrors>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://maven.pkg.github.com/hadoop-sandbox/hadoop-sandbox-images</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>default</activeProfile>
+    </activeProfiles>
+</settings>
