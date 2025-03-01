@@ -85,8 +85,7 @@ RUN apt-get -q update && \
     yasm \
     python3 \
     pylint \
-    python3-dateutil \
-    gettext-base && \
+    python3-dateutil && \
   if [ "$TARGETPLATFORM" == "linux/amd64" ]; then apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests libisal-dev ; fi && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
@@ -123,18 +122,7 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 # Build Hadoop
 ######
 COPY ./hadoop-dist/patches /patches
-COPY hadoop-dist/m2-github-settings.xml.in /root/m2-github-settings.xml.in
-ARG github_token
-ARG github_maven_settings="false"
-RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists  \
-  if [ "$github_maven_settings" == "true" ]; then \
-    install -d /root/.m2 && \
-    envsubst < /root/m2-github-settings.xml.in > /root/.m2/settings.xml && \
-    echo "Using github packages as Maven repository"; \
-  else \
-    echo "Using standard Maven repository"; \
-  fi && \
-  install -d "/opt/hadoop-src" && \
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/hadoop-src" && \
   tar xzf "/dists/hadoop-src.tgz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
   for patch in /patches/*; do \
@@ -155,7 +143,6 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists  \
   rm -rf "/hadoop/share/doc" && \
   install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
   rm -rf "/opt/hadoop-src" && \
-  rm /root/.m2/settings.xml
 
 FROM base AS hadoop-base
 ARG TARGETPLATFORM
