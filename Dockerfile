@@ -142,7 +142,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   rm -rf "/hadoop/etc/hadoop" && \
   rm -rf "/hadoop/share/doc" && \
   install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
-  rm -rf "/opt/hadoop-src" && \
+  rm -rf "/opt/hadoop-src"
 
 FROM base AS hadoop-base
 ARG TARGETPLATFORM
