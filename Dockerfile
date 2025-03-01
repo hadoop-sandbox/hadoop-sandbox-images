@@ -85,7 +85,8 @@ RUN apt-get -q update && \
     yasm \
     python3 \
     pylint \
-    python3-dateutil && \
+    python3-dateutil \
+    gettext-base && \
   if [ "$TARGETPLATFORM" == "linux/amd64" ]; then apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests libisal-dev ; fi && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
