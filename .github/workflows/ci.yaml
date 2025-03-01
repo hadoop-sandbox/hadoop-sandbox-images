@@ -67,6 +67,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -86,6 +87,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -105,6 +107,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -124,6 +127,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -143,6 +147,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -162,6 +167,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
@@ -181,6 +187,7 @@ jobs:
           build-args: |
             java_version=${{ matrix.java_version }}
             github_maven_settings=true
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}

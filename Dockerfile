@@ -122,14 +122,18 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 # Build Hadoop
 ######
 COPY ./hadoop-dist/patches /patches
-COPY ./hadoop-dist/m2-github-settings.xml /root/.m2.github/settings.xml
+COPY hadoop-dist/m2-github-settings.xml.in /root/m2-github-settings.xml.in
+ARG github_token
 ARG github_maven_settings="false"
-RUN if [ "$github_maven_settings" == "true" ]; then \
-    install -d /root/.m2 && cp /root/.m2.github/settings.xml /root/.m2/settings.xml && \
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists  \
+  if [ "$github_maven_settings" == "true" ]; then \
+    install -d /root/.m2 && \
+    envsubst < /root/m2-github-settings.xml.in > /root/.m2/settings.xml && \
     echo "Using github packages as Maven repository"; \
-    else echo "Using standard Maven repository"; \
-    fi
-RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/opt/hadoop-src" && \
+  else \
+    echo "Using standard Maven repository"; \
+  fi && \
+  install -d "/opt/hadoop-src" && \
   tar xzf "/dists/hadoop-src.tgz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
   for patch in /patches/*; do \
@@ -149,7 +153,8 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install 
   rm -rf "/hadoop/etc/hadoop" && \
   rm -rf "/hadoop/share/doc" && \
   install -d -o root -g root -m 755 "/hadoop/etc/hadoop" && \
-  rm -rf "/opt/hadoop-src"
+  rm -rf "/opt/hadoop-src" && \
+  rm /root/.m2/settings.xml
 
 FROM base AS hadoop-base
 ARG TARGETPLATFORM
