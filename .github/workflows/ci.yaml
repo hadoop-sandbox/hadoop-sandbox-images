@@ -104,7 +104,7 @@ jobs:
           target: hadoop-hdfs-datanode
           build-args: |
             java_version=${{ matrix.java_version }}
-            github_maven_settings="true"
+            github_maven_settings=true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:java-${{ matrix.java_version }}-${{ matrix.arch }}
