@@ -34,6 +34,12 @@ jobs:
       digest_hadoop_yarn_resourcemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}
       digest_hadoop_yarn_nodemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}
 
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
     strategy:
       matrix:
         include:
@@ -55,6 +61,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
@@ -75,6 +89,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-client
         id: hadoop_client
@@ -93,6 +115,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-datanode
         id: hadoop_hdfs_datanode
@@ -111,6 +141,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-namenode
         id: hadoop_hdfs_namenode
@@ -129,6 +167,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-mapred-jobhistoryserver
         id: hadoop_mapred_jobhistoryserver
@@ -147,6 +193,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-resourcemanager
         id: hadoop_yarn_resourcemanager
@@ -165,6 +219,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-nodemanager
         id: hadoop_yarn_nodemanager
@@ -183,6 +245,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Publish image digests
         id: publish_digest
@@ -215,6 +285,13 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [build_images]
     if: github.event_name != 'pull_request'
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
     steps:
       -
         name: Login to DockerHub
@@ -224,7 +301,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Create and push hadoop-base manifest
+        name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Create and push hadoop-base manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest" \
@@ -238,7 +323,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
-        name: Create and push hadoop-client manifest
+        name: Create and push hadoop-client manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest" \
@@ -252,7 +337,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
-        name: Create and push hadoop-hdfs-datanode manifest
+        name: Create and push hadoop-hdfs-datanode manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest" \
@@ -266,7 +351,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
       -
-        name: Create and push hadoop-hdfs-namenode manifest
+        name: Create and push hadoop-hdfs-namenode manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest" \
@@ -280,7 +365,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
       -
-        name: Create and push hadoop-mapred-jobhistoryserver manifest
+        name: Create and push hadoop-mapred-jobhistoryserver manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest" \
@@ -294,7 +379,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
       -
-        name: Create and push hadoop-yarn-resourcemanager manifest
+        name: Create and push hadoop-yarn-resourcemanager manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest" \
@@ -308,7 +393,7 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
       -
-        name: Create and push hadoop-yarn-nodemanager manifest
+        name: Create and push hadoop-yarn-nodemanager manifest on DockerHub
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest" \
@@ -321,3 +406,101 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
+      -
+        name: Create and push hadoop-base manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
+      -
+        name: Create and push hadoop-client manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
+      -
+        name: Create and push hadoop-hdfs-datanode manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
+      -
+        name: Create and push hadoop-hdfs-namenode manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
+      -
+        name: Create and push hadoop-mapred-jobhistoryserver manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
+      -
+        name: Create and push hadoop-yarn-resourcemanager manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
+      -
+        name: Create and push hadoop-yarn-nodemanager manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
