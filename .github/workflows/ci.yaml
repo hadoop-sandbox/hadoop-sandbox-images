@@ -87,16 +87,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-client
         id: hadoop_client
@@ -113,16 +113,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-datanode
         id: hadoop_hdfs_datanode
@@ -139,16 +139,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-namenode
         id: hadoop_hdfs_namenode
@@ -165,16 +165,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-mapred-jobhistoryserver
         id: hadoop_mapred_jobhistoryserver
@@ -191,16 +191,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-resourcemanager
         id: hadoop_yarn_resourcemanager
@@ -217,16 +217,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-nodemanager
         id: hadoop_yarn_nodemanager
@@ -243,16 +243,16 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-${{ matrix.arch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-${{ matrix.arch }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Publish image digests
         id: publish_digest
@@ -318,8 +318,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
@@ -332,8 +332,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
@@ -346,8 +346,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
       -
@@ -360,8 +360,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
       -
@@ -374,8 +374,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
       -
@@ -388,8 +388,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
       -
@@ -402,8 +402,8 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3-java-11" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4" \
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4-java-11" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1" \
-              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
       -
@@ -416,8 +416,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
@@ -430,8 +430,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
@@ -444,8 +444,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
       -
@@ -458,8 +458,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
       -
@@ -472,8 +472,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
       -
@@ -486,8 +486,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
       -
@@ -500,7 +500,7 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.1-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"

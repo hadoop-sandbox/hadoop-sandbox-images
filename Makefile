@@ -1,18 +1,11 @@
 java_version := 11
 default_java_version := 11
-docker_reg :=
-docker_org := packet23
-platforms := linux/amd64,linux/arm64
+docker_reg := ghcr.io/
+docker_org := hadoop-sandbox
 cache := cache
 docker := docker
-hadoop_major := 3
-hadoop_minor := 4
-hadoop_patch := 1
 
-version_tags := $(hadoop_major) $(hadoop_major).$(hadoop_minor) $(hadoop_major).$(hadoop_minor).$(hadoop_patch)
-
-tags_always := $(foreach version_tag,$(version_tags),$(version_tag)-java-$(java_version)) java-$(java_version)
-tags_default := $(tags_always) $(version_tags) latest
+tags_default := latest
 
 dist_target := hadoop-dist
 base_image_target := hadoop-base
@@ -31,19 +24,18 @@ dist_image_iid := $(addsuffix .iid, $(dist_image))
 base_image_iid := $(addsuffix .iid, $(base_image))
 images_iid := $(addsuffix .iid, $(images))
 
-images_push := $(addsuffix .push, $(images) $(base_image))
+images_load := $(addsuffix .load, $(images) $(base_image))
 
 all: $(base_image_iid) $(images_iid)
 
-push: $(images_push)
+load: $(images_load)
 
 clean:
-	$(RM) *.iid *.push
+	$(RM) *.iid *.load
 
 $(dist_image_iid): Dockerfile
 	$(docker) buildx build \
 		--iidfile "$@" \
-		--platform "$(platforms)" \
 		--output type=image \
 		--target "$(patsubst %.iid,%,$@)" \
 		-f "$<" .
@@ -52,7 +44,6 @@ $(dist_image_iid): Dockerfile
 	$(docker) buildx build \
 		--build-arg java_version="$(java_version)" \
 		--iidfile "$@" \
-		--platform "$(platforms)" \
 		--output type=image \
 		--target "$(patsubst %-java-$(java_version).iid,%,$@)" \
 		-f "$<" .
@@ -60,22 +51,20 @@ $(dist_image_iid): Dockerfile
 $(base_image_iid): $(dist_image_iid)
 $(images_iid): $(base_image_iid)
 
-%.push: %.iid
+%.load: %.iid
 ifeq ($(java_version),$(default_java_version))
 	$(docker) buildx build \
 		--build-arg java_version="$(java_version)" \
-		--platform "$(platforms)" \
-		--target "$(subst -java-$(java_version).push,,$@)" \
-		$(foreach tag,$(tags_default), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
-		--push . && \
+		--target "$(subst -java-$(java_version).load,,$@)" \
+		$(foreach tag,$(tags_default), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).load,,$@):$(tag)") \
+		--load . && \
 	touch "$@"
 else
 	$(docker) buildx build \
 		--build-arg java_version="$(java_version)" \
-		--platform "$(platforms)" \
-		--target "$(subst -java-$(java_version).push,,$@)" \
-		$(foreach tag,$(tags_always), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).push,,$@):$(tag)") \
-		--push . && \
+		--target "$(subst -java-$(java_version).load,,$@)" \
+		$(foreach tag,$(tags_always), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).load,,$@):$(tag)") \
+		--load . && \
 	touch "$@"
 endif
 

@@ -1,5 +1,5 @@
 *~
 *.iid
-*.push
+*.load
 /cache/
 /.idea/
