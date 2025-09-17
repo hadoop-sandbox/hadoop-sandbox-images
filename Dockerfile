@@ -4,7 +4,7 @@ ADD --checksum=sha256:024663a47939ed2de962265a99bc6044747b3c3e751d22381f51c75bd2
 ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
 ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
 
-FROM ubuntu:jammy AS base
+FROM ubuntu:noble AS base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /root
 RUN echo -e "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";" > /etc/apt/apt.conf.d/10disableextras && \
@@ -64,6 +64,7 @@ RUN apt-get -q update && \
     libsnappy-dev \
     libzstd-dev \
     zlib1g-dev \
+    libtirpc-dev \
     libboost-dev \
     libboost-date-time-dev \
     libboost-program-options-dev \
@@ -144,7 +145,7 @@ FROM base AS hadoop-base
 ARG TARGETPLATFORM
 ARG java_version=8
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests "openjdk-${java_version}-jdk" "openjdk-${java_version}-dbg" ca-certificates curl libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl3 libc6-dbg && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests "openjdk-${java_version}-jdk" "openjdk-${java_version}-dbg" ca-certificates curl libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl3 libc6-dbg libtirpc3 && \
   case "${TARGETPLATFORM}" in \
     linux/amd64) \
       DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests libisal2; \
