@@ -164,7 +164,9 @@ ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
   HADOOP_HOME="/hadoop" \
   PATH="${PATH}:/hadoop/bin:/hadoop/sbin"
 COPY --chown=root:root ./hadoop-base/docker-entrypoint.sh /docker-entrypoint.sh
-RUN useradd -ms /bin/bash sandbox && \
+RUN userdel -r ubuntu && \
+  groupadd -g 1000 sandbox && \
+  useradd -ms /bin/bash -u 1000 -g 1000 sandbox && \
   echo "sandbox:sandbox" | chpasswd && \
   groupadd -r -g 120 hadoop && \
   groupadd -r -g 121 hdfs && \
