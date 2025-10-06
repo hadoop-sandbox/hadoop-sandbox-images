@@ -122,9 +122,13 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 ######
 # Build Hadoop
 ######
+COPY ./hadoop-dist/patches /patches
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/hadoop-src" && \
   tar xzf "/dists/hadoop-src.tgz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
+  for patch in /patches/*; do \
+    patch -p1 < "$patch"; \
+  done && \
   echo "JAVA_HOME: $JAVA_HOME" && \
   mvn --batch-mode package -Pdist,native -DskipTests -Dcyclonedx.skip=true -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
