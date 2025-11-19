@@ -14,7 +14,9 @@ images_target := hadoop-client \
 	hadoop-hdfs-namenode \
 	hadoop-mapred-jobhistoryserver \
 	hadoop-yarn-resourcemanager \
-	hadoop-yarn-nodemanager
+	hadoop-yarn-nodemanager \
+	hadoop-client-spark \
+	hadoop-yarn-nodemanager-spark
 
 dist_image := $(dist_target)
 base_image := $(addsuffix -java-$(java_version), $(base_image_target))
@@ -68,4 +70,4 @@ else
 	touch "$@"
 endif
 
-.PHONY: all push clean
+.PHONY: all load clean

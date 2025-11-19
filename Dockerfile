@@ -3,6 +3,7 @@ FROM scratch AS hadoop-downloads
 ADD --checksum=sha256:024663a47939ed2de962265a99bc6044747b3c3e751d22381f51c75bd2026a1e https://dlcdn.apache.org/hadoop/common/hadoop-3.4.2/hadoop-3.4.2-src.tar.gz /dists//hadoop-src.tgz
 ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
 ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
+ADD --checksum=sha256:bd5315fa89db737f005971835b94e093c3d2b8581d2411737d281627d6803cc3 https://dlcdn.apache.org/spark/spark-4.0.1/spark-4.0.1-bin-hadoop3.tgz /dists/spark.tgz
 
 FROM ubuntu:noble AS base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -186,14 +187,14 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 
 FROM hadoop-base AS hadoop-client
 COPY --chown=root:root ./hadoop-client/docker-entrypoint.d /docker-entrypoint.d
-RUN  apt-get update && \
-   DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openssh-server && \
-   apt-get clean && \
-   rm -rf /var/lib/apt/lists/* && \
-   install -d -o root -g root -m 755 /run/sshd && \
-   rm /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
-   mv /etc/ssh /etc/ssh.in && \
-   echo -e "PATH=\"${PATH}\"\nHADOOP_HOME=\"/hadoop\"\nJAVA_HOME=\"${JAVA_HOME}\"\n" >> /etc/environment
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openssh-server && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  install -d -o root -g root -m 755 /run/sshd && \
+  rm /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
+  mv /etc/ssh /etc/ssh.in && \
+  echo -e "PATH=\"${PATH}\"\nHADOOP_HOME=\"/hadoop\"\nJAVA_HOME=\"${JAVA_HOME}\"\n" > /etc/environment
 CMD ["/usr/sbin/sshd", "-D", "-e"]
 
 FROM hadoop-base AS hadoop-hdfs-datanode
@@ -215,3 +216,28 @@ CMD ["yarn", "nodemanager"]
 FROM hadoop-base AS hadoop-yarn-resourcemanager
 COPY --chown=root:root ./hadoop-yarn-resourcemanager/docker-entrypoint.d /docker-entrypoint.d
 CMD ["yarn", "resourcemanager"]
+
+FROM hadoop-client AS hadoop-client-spark
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  update-java-alternatives -s "java-1.11.0-openjdk-$TARGETARCH"
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/spark" && \
+  tar xzf "/dists/spark.tgz" --strip-components 1 -C "/spark" && \
+  chown -R root:root /spark && \
+  find /spark -type d -print0 | xargs -r0 chmod 755 && \
+  find /spark -type f -print0 | xargs -r0 chmod 644 && \
+  find /spark/bin -type f -print0 | xargs -r0 chmod 755
+ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
+  HADOOP_HOME="/hadoop" \
+  PATH="${PATH}:/hadoop/bin:/hadoop/sbin:/spark/bin"
+RUN echo -e "PATH=\"${PATH}\"\nHADOOP_HOME=\"/hadoop\"\nJAVA_HOME=\"${JAVA_HOME}\"\n" > /etc/environment
+
+FROM hadoop-yarn-nodemanager AS hadoop-yarn-nodemanager-spark
+RUN  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  update-java-alternatives -s java-1.11.0-openjdk-$TARGETARCH
+
