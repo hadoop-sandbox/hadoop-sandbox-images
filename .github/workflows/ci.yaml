@@ -21,18 +21,22 @@ jobs:
     outputs:
       digest_hadoop_base_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_base_11_amd64 }}
       digest_hadoop_client_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_client_11_amd64 }}
+      digest_hadoop_client_spark_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_client_spark_11_amd64 }}
       digest_hadoop_hdfs_datanode_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}
       digest_hadoop_hdfs_namenode_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}
       digest_hadoop_mapred_jobhistoryserver_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}
       digest_hadoop_yarn_resourcemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}
       digest_hadoop_yarn_nodemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}
+      digest_hadoop_yarn_nodemanager_spark_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}
       digest_hadoop_base_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_base_11_arm64 }}
       digest_hadoop_client_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_11_arm64 }}
+      digest_hadoop_client_spark_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_spark_11_arm64 }}
       digest_hadoop_hdfs_datanode_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}
       digest_hadoop_hdfs_namenode_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}
       digest_hadoop_mapred_jobhistoryserver_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}
       digest_hadoop_yarn_resourcemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}
       digest_hadoop_yarn_nodemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}
+      digest_hadoop_yarn_nodemanager_spark_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}
 
     permissions:
       contents: read
@@ -123,6 +127,32 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
+        name: Build hadoop-client-spark
+        id: hadoop_client_spark
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-client-spark
+          build-args: |
+            java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-datanode
         id: hadoop_hdfs_datanode
@@ -254,6 +284,32 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
+        name: Build hadoop-yarn-nodemanager-spark
+        id: hadoop_yarn_nodemanager_spark
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: hadoop-yarn-nodemanager-spark
+          build-args: |
+            java_version=${{ matrix.java_version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:latest-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4.2-${{ matrix.arch }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
         name: Publish image digests
         id: publish_digest
         run: |
@@ -265,6 +321,9 @@ jobs:
           
           digest_hadoop_client="${{ steps.hadoop_client.outputs.digest }}" 
           echo "digest_hadoop_client_${java_version}_${arch}=${digest_hadoop_client}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_client_spark="${{ steps.hadoop_client_spark.outputs.digest }}" 
+          echo "digest_hadoop_client_spark_${java_version}_${arch}=${digest_hadoop_client_spark}" >> "$GITHUB_OUTPUT"
           
           digest_hadoop_hdfs_datanode="${{ steps.hadoop_hdfs_datanode.outputs.digest }}" 
           echo "digest_hadoop_hdfs_datanode_${java_version}_${arch}=${digest_hadoop_hdfs_datanode}" >> "$GITHUB_OUTPUT"
@@ -280,6 +339,9 @@ jobs:
           
           digest_hadoop_yarn_nodemanager="${{ steps.hadoop_yarn_nodemanager.outputs.digest }}" 
           echo "digest_hadoop_yarn_nodemanager_${java_version}_${arch}=${digest_hadoop_yarn_nodemanager}" >> "$GITHUB_OUTPUT"
+          
+          digest_hadoop_yarn_nodemanager_spark="${{ steps.hadoop_yarn_nodemanager_spark.outputs.digest }}" 
+          echo "digest_hadoop_yarn_nodemanager_spark_${java_version}_${arch}=${digest_hadoop_yarn_nodemanager_spark}" >> "$GITHUB_OUTPUT"
 
   build_manifests:
     runs-on: ubuntu-24.04
@@ -336,6 +398,20 @@ jobs:
               -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:3.4.2-java-11" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
+      -
+        name: Create and push hadoop-client-spark manifest on DockerHub
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:3.4.2-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-client-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_arm64 }}"
       -
         name: Create and push hadoop-hdfs-datanode manifest on DockerHub
         if: github.event_name != 'pull_request'
@@ -407,6 +483,20 @@ jobs:
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
       -
+        name: Create and push hadoop-yarn-nodemanager-spark manifest on DockerHub
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:latest" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4-java-11" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4.2" \
+              -t "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:3.4.2-java-11" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}" \
+              "${{ secrets.DOCKERHUB_USERNAME }}/hadoop-yarn-nodemanager-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}"
+      -
         name: Create and push hadoop-base manifest on GitHub Container Registry
         if: github.event_name != 'pull_request'
         run: |
@@ -434,6 +524,20 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
+      -
+        name: Create and push hadoop-client-spark manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_arm64 }}"
       -
         name: Create and push hadoop-hdfs-datanode manifest on GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -504,3 +608,17 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
+      -
+        name: Create and push hadoop-yarn-nodemanager-spark manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}"
