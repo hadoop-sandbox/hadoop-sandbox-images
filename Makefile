@@ -16,7 +16,8 @@ images_target := hadoop-client \
 	hadoop-yarn-resourcemanager \
 	hadoop-yarn-nodemanager \
 	hadoop-client-spark \
-	hadoop-yarn-nodemanager-spark
+	hadoop-yarn-nodemanager-spark \
+	spark-historyserver
 
 dist_image := $(dist_target)
 base_image := $(addsuffix -java-$(java_version), $(base_image_target))

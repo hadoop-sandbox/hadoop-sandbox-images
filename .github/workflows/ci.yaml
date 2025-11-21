@@ -28,6 +28,7 @@ jobs:
       digest_hadoop_yarn_resourcemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}
       digest_hadoop_yarn_nodemanager_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}
       digest_hadoop_yarn_nodemanager_spark_11_amd64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}
+      digest_spark_historyserver_11_amd64: ${{ steps.publish_digest.outputs.digest_spark_historyserver_11_amd64 }}
       digest_hadoop_base_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_base_11_arm64 }}
       digest_hadoop_client_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_11_arm64 }}
       digest_hadoop_client_spark_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_client_spark_11_arm64 }}
@@ -37,6 +38,7 @@ jobs:
       digest_hadoop_yarn_resourcemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}
       digest_hadoop_yarn_nodemanager_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}
       digest_hadoop_yarn_nodemanager_spark_11_arm64: ${{ steps.publish_digest.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}
+      digest_spark_historyserver_11_arm64: ${{ steps.publish_digest.outputs.digest_spark_historyserver_11_arm64 }}
 
     permissions:
       contents: read
@@ -231,6 +233,24 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
+        name: Build spark-historyserver
+        id: spark_historyserver
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          target: spark-historyserver
+          build-args: |
+            java_version=${{ matrix.java_version }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+      -
         name: Publish image digests
         id: publish_digest
         run: |
@@ -263,6 +283,9 @@ jobs:
           
           digest_hadoop_yarn_nodemanager_spark="${{ steps.hadoop_yarn_nodemanager_spark.outputs.digest }}" 
           echo "digest_hadoop_yarn_nodemanager_spark_${java_version}_${arch}=${digest_hadoop_yarn_nodemanager_spark}" >> "$GITHUB_OUTPUT"
+          
+          digest_spark_historyserver="${{ steps.spark_historyserver.outputs.digest }}" 
+          echo "digest_spark_historyserver_${java_version}_${arch}=${digest_spark_historyserver}" >> "$GITHUB_OUTPUT"
 
   build_manifests:
     runs-on: ubuntu-24.04
@@ -410,3 +433,17 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}"
+      -
+        name: Create and push spark-historyserver manifest on GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools create -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-java-11" \
+              "ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest-amd64@${{ needs.build_images.outputs.digest_spark_historyserver_11_amd64 }}" \
+              "ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest-arm64@${{ needs.build_images.outputs.digest_spark_historyserver_11_arm64 }}"

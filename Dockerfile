@@ -167,7 +167,7 @@ COPY --from=hadoop-dist /hadoop /hadoop
 ARG TARGETARCH
 ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
   HADOOP_HOME="/hadoop" \
-  PATH="${PATH}:/hadoop/bin:/hadoop/sbin"
+  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/hadoop/sbin:/hadoop/bin"
 COPY --chown=root:root ./hadoop-base/docker-entrypoint.sh /docker-entrypoint.sh
 RUN userdel -r ubuntu && \
   groupadd -g 1000 sandbox && \
@@ -177,13 +177,33 @@ RUN userdel -r ubuntu && \
   groupadd -r -g 121 hdfs && \
   groupadd -r -g 122 yarn && \
   groupadd -r -g 123 mapred && \
+  groupadd -r -g 124 spark && \
   useradd -r -u 121 -g hdfs -Ms /bin/bash -d / -G hadoop hdfs && \
   useradd -r -u 122 -g yarn -Ms /bin/bash -d / -G hadoop yarn && \
   useradd -r -u 123 -g mapred -Ms /bin/bash -d / -G hadoop mapred && \
+  useradd -r -u 124 -g spark -Ms /bin/bash -d / -G hadoop spark && \
   chown root:root /docker-entrypoint.sh && \
   chmod 755 /docker-entrypoint.sh
 WORKDIR /
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+FROM hadoop-base AS hadoop-base-spark
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  update-java-alternatives -s "java-1.${java_version}.0-openjdk-$TARGETARCH" && \
+  ln -s "/usr/lib/jvm/java-17-openjdk-$TARGETARCH" /usr/lib/jvm/java-17-openjdk
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/spark" && \
+  tar xzf "/dists/spark.tgz" --strip-components 1 -C "/spark" && \
+  chown -R root:root /spark && \
+  find /spark -type d -print0 | xargs -r0 chmod 755 && \
+  find /spark -type f -print0 | xargs -r0 chmod 644 && \
+  find /spark/bin -type f -print0 | xargs -r0 chmod 755 && \
+  find /spark/sbin -type f -print0 | xargs -r0 chmod 755
+ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
+  HADOOP_HOME="/hadoop" \
+  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/hadoop/sbin:/hadoop/bin:/spark/sbin:/spark/bin"
 
 FROM hadoop-base AS hadoop-client
 COPY --chown=root:root ./hadoop-client/docker-entrypoint.d /docker-entrypoint.d
@@ -217,27 +237,23 @@ FROM hadoop-base AS hadoop-yarn-resourcemanager
 COPY --chown=root:root ./hadoop-yarn-resourcemanager/docker-entrypoint.d /docker-entrypoint.d
 CMD ["yarn", "resourcemanager"]
 
-FROM hadoop-client AS hadoop-client-spark
+FROM hadoop-base-spark AS hadoop-client-spark
+COPY --chown=root:root ./hadoop-client/docker-entrypoint.d /docker-entrypoint.d
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openssh-server && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
-  update-java-alternatives -s "java-1.11.0-openjdk-$TARGETARCH"
-RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/spark" && \
-  tar xzf "/dists/spark.tgz" --strip-components 1 -C "/spark" && \
-  chown -R root:root /spark && \
-  find /spark -type d -print0 | xargs -r0 chmod 755 && \
-  find /spark -type f -print0 | xargs -r0 chmod 644 && \
-  find /spark/bin -type f -print0 | xargs -r0 chmod 755
-ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
-  HADOOP_HOME="/hadoop" \
-  PATH="${PATH}:/hadoop/bin:/hadoop/sbin:/spark/bin"
-RUN echo -e "PATH=\"${PATH}\"\nHADOOP_HOME=\"/hadoop\"\nJAVA_HOME=\"${JAVA_HOME}\"\n" > /etc/environment
+  install -d -o root -g root -m 755 /run/sshd && \
+  rm /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
+  mv /etc/ssh /etc/ssh.in && \
+  echo -e "PATH=\"${PATH}\"\nHADOOP_HOME=\"/hadoop\"\nJAVA_HOME=\"${JAVA_HOME}\"\n" > /etc/environment
+CMD ["/usr/sbin/sshd", "-D", "-e"]
 
-FROM hadoop-yarn-nodemanager AS hadoop-yarn-nodemanager-spark
-RUN  apt-get update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  update-java-alternatives -s java-1.11.0-openjdk-$TARGETARCH
+FROM hadoop-base-spark AS hadoop-yarn-nodemanager-spark
+COPY --chown=root:root ./hadoop-yarn-nodemanager/docker-entrypoint.d /docker-entrypoint.d
+CMD ["yarn", "nodemanager"]
 
+FROM hadoop-base-spark AS spark-historyserver
+COPY --chown=root:root ./spark-historyserver/docker-entrypoint.d /docker-entrypoint.d
+ENV SPARK_NO_DAEMONIZE=true
+CMD ["start-history-server.sh"]
