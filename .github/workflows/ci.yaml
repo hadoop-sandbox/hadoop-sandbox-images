@@ -86,8 +86,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-client
         id: hadoop_client
@@ -104,8 +104,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-client-spark
         id: hadoop_client_spark
@@ -122,8 +122,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-datanode
         id: hadoop_hdfs_datanode
@@ -140,8 +140,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-hdfs-namenode
         id: hadoop_hdfs_namenode
@@ -158,8 +158,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-mapred-jobhistoryserver
         id: hadoop_mapred_jobhistoryserver
@@ -176,8 +176,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-resourcemanager
         id: hadoop_yarn_resourcemanager
@@ -194,8 +194,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-nodemanager
         id: hadoop_yarn_nodemanager
@@ -212,8 +212,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build hadoop-yarn-nodemanager-spark
         id: hadoop_yarn_nodemanager_spark
@@ -230,8 +230,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Build spark-historyserver
         id: spark_historyserver
@@ -248,8 +248,8 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/spark-historyserver:3-java-${{ matrix.java_version }}-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-${{ matrix.arch }}
             ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-java-${{ matrix.java_version }}-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-${{ matrix.arch }}
-            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-java-${{ matrix.java_version }}-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.3-${{ matrix.arch }}
+            ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.3-java-${{ matrix.java_version }}-${{ matrix.arch }}
       -
         name: Publish image digests
         id: publish_digest
@@ -317,8 +317,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-base:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_base_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-base:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_base_11_arm64 }}"
       -
@@ -331,8 +331,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_11_arm64 }}"
       -
@@ -345,8 +345,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-client-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_client_spark_11_arm64 }}"
       -
@@ -359,8 +359,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-datanode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_datanode_11_arm64 }}"
       -
@@ -373,8 +373,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-hdfs-namenode:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_hdfs_namenode_11_arm64 }}"
       -
@@ -387,8 +387,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-mapred-jobhistoryserver:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_mapred_jobhistoryserver_11_arm64 }}"
       -
@@ -401,8 +401,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-resourcemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_resourcemanager_11_arm64 }}"
       -
@@ -415,8 +415,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_11_arm64 }}"
       -
@@ -429,8 +429,8 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-amd64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/hadoop-yarn-nodemanager-spark:latest-arm64@${{ needs.build_images.outputs.digest_hadoop_yarn_nodemanager_spark_11_arm64 }}"
       -
@@ -443,7 +443,7 @@ jobs:
               -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3-java-11" \
               -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4" \
               -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4-java-11" \
-              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2" \
-              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.2-java-11" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.3" \
+              -t "ghcr.io/${{ github.repository_owner }}/spark-historyserver:3.4.3-java-11" \
               "ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest-amd64@${{ needs.build_images.outputs.digest_spark_historyserver_11_amd64 }}" \
               "ghcr.io/${{ github.repository_owner }}/spark-historyserver:latest-arm64@${{ needs.build_images.outputs.digest_spark_historyserver_11_arm64 }}"

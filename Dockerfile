@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 FROM scratch AS hadoop-downloads
-ADD --checksum=sha256:024663a47939ed2de962265a99bc6044747b3c3e751d22381f51c75bd2026a1e https://archive.apache.org/dist/hadoop/common/hadoop-3.4.2/hadoop-3.4.2-src.tar.gz /dists//hadoop-src.tgz
+ADD --checksum=sha256:14700e20e8fe6e0c934c95b258303d193396e725414588740ad5ef5dedf468b4 https://archive.apache.org/dist/hadoop/common/hadoop-3.4.3/hadoop-3.4.3-src.tar.gz /dists//hadoop-src.tgz
 ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
 ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
-ADD --checksum=sha256:bd5315fa89db737f005971835b94e093c3d2b8581d2411737d281627d6803cc3 https://archive.apache.org/dist/spark/spark-4.0.1/spark-4.0.1-bin-hadoop3.tgz /dists/spark.tgz
+ADD --checksum=sha256:c6569c7e239834bfdc131cb1959125353193381ac2d2a3348a80a8750f006580 https://archive.apache.org/dist/spark/spark-4.1.1/spark-4.1.1-bin-without-hadoop.tgz /dists/spark.tgz
 
 FROM ubuntu:noble AS base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -123,17 +123,13 @@ ENV PROTOBUF_HOME="/opt/protobuf" \
 ######
 # Build Hadoop
 ######
-COPY ./hadoop-dist/patches /patches
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/hadoop-src" && \
   tar xzf "/dists/hadoop-src.tgz" --strip-components 1 -C "/opt/hadoop-src" && \
   cd "/opt/hadoop-src" && \
-  for patch in /patches/*; do \
-    patch -p1 < "$patch"; \
-  done && \
   echo "JAVA_HOME: $JAVA_HOME" && \
   mvn --batch-mode package -Pdist,native -DskipTests -Dcyclonedx.skip=true -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.2.tar.gz" --strip-components 1 -C "/hadoop" && \
+  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.3.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
   find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \
