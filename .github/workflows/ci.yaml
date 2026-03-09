@@ -73,7 +73,7 @@ jobs:
       -
         name: Build hadoop-base
         id: hadoop_base
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-base
@@ -91,7 +91,7 @@ jobs:
       -
         name: Build hadoop-client
         id: hadoop_client
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-client
@@ -109,7 +109,7 @@ jobs:
       -
         name: Build hadoop-client-spark
         id: hadoop_client_spark
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-client-spark
@@ -127,7 +127,7 @@ jobs:
       -
         name: Build hadoop-hdfs-datanode
         id: hadoop_hdfs_datanode
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-hdfs-datanode
@@ -145,7 +145,7 @@ jobs:
       -
         name: Build hadoop-hdfs-namenode
         id: hadoop_hdfs_namenode
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-hdfs-namenode
@@ -163,7 +163,7 @@ jobs:
       -
         name: Build hadoop-mapred-jobhistoryserver
         id: hadoop_mapred_jobhistoryserver
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-mapred-jobhistoryserver
@@ -181,7 +181,7 @@ jobs:
       -
         name: Build hadoop-yarn-resourcemanager
         id: hadoop_yarn_resourcemanager
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-yarn-resourcemanager
@@ -199,7 +199,7 @@ jobs:
       -
         name: Build hadoop-yarn-nodemanager
         id: hadoop_yarn_nodemanager
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-yarn-nodemanager
@@ -217,7 +217,7 @@ jobs:
       -
         name: Build hadoop-yarn-nodemanager-spark
         id: hadoop_yarn_nodemanager_spark
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: hadoop-yarn-nodemanager-spark
@@ -235,7 +235,7 @@ jobs:
       -
         name: Build spark-historyserver
         id: spark_historyserver
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ github.event_name != 'pull_request' }}
           target: spark-historyserver
