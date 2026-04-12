@@ -1,5 +1,3 @@
-java_version := 11
-default_java_version := 11
 docker_reg := ghcr.io/
 docker_org := hadoop-sandbox
 cache := cache
@@ -20,8 +18,8 @@ images_target := hadoop-client \
 	spark-historyserver
 
 dist_image := $(dist_target)
-base_image := $(addsuffix -java-$(java_version), $(base_image_target))
-images := $(addsuffix -java-$(java_version), $(images_target))
+base_image := $(base_image_target)
+images := $(images_target)
 
 dist_image_iid := $(addsuffix .iid, $(dist_image))
 base_image_iid := $(addsuffix .iid, $(base_image))
@@ -45,30 +43,19 @@ $(dist_image_iid): Dockerfile
 
 %.iid: Dockerfile
 	$(docker) buildx build \
-		--build-arg java_version="$(java_version)" \
 		--iidfile "$@" \
 		--output type=image \
-		--target "$(patsubst %-java-$(java_version).iid,%,$@)" \
+		--target "$(patsubst %.iid,%,$@)" \
 		-f "$<" .
 
 $(base_image_iid): $(dist_image_iid)
 $(images_iid): $(base_image_iid)
 
 %.load: %.iid
-ifeq ($(java_version),$(default_java_version))
 	$(docker) buildx build \
-		--build-arg java_version="$(java_version)" \
-		--target "$(subst -java-$(java_version).load,,$@)" \
-		$(foreach tag,$(tags_default), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).load,,$@):$(tag)") \
+		--target "$(subst .load,,$@)" \
+		$(foreach tag,$(tags_default), --tag "$(docker_reg)$(docker_org)/$(subst .load,,$@):$(tag)") \
 		--load . && \
 	touch "$@"
-else
-	$(docker) buildx build \
-		--build-arg java_version="$(java_version)" \
-		--target "$(subst -java-$(java_version).load,,$@)" \
-		$(foreach tag,$(tags_always), --tag "$(docker_reg)$(docker_org)/$(subst -java-$(java_version).load,,$@):$(tag)") \
-		--load . && \
-	touch "$@"
-endif
 
 .PHONY: all load clean
