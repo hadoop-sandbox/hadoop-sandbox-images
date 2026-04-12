@@ -1,36 +1,35 @@
 # syntax=docker/dockerfile:1
 FROM scratch AS hadoop-downloads
-ADD --checksum=sha256:14700e20e8fe6e0c934c95b258303d193396e725414588740ad5ef5dedf468b4 https://archive.apache.org/dist/hadoop/common/hadoop-3.4.3/hadoop-3.4.3-src.tar.gz /dists//hadoop-src.tgz
-ADD --checksum=sha256:2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09 https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz /dists/protobuf.tgz
+ADD --checksum=sha256:45328a7e5a8fb29ca8503f33e5f0269f8fbbce8824ec9127426aad6d1d9af023 https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0-src.tar.gz /dists//hadoop-src.tgz
+ADD --checksum=sha256:4356e78744dfb2df3890282386c8568c85868116317d9b3ad80eb11c2aecf2ff https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.25.5.tar.gz /dists/protobuf.tgz
+ADD --checksum=sha256:987ce98f02eefbaf930d6e38ab16aa05737234d7afbab2d5c4ea7adbe50c28ed https://github.com/abseil/abseil-cpp/archive/refs/tags/20230802.1.tar.gz /dists/abseil.tgz
 ADD --checksum=sha256:4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f https://github.com/spotbugs/spotbugs/releases/download/4.2.2/spotbugs-4.2.2.tgz /dists/spotbugs.tgz
 ADD --checksum=sha256:c6569c7e239834bfdc131cb1959125353193381ac2d2a3348a80a8750f006580 https://archive.apache.org/dist/spark/spark-4.1.1/spark-4.1.1-bin-without-hadoop.tgz /dists/spark.tgz
+ADD --checksum=sha256:2128a4c96862b5c0970c1e34d76b1d57e4a1016b80df85ad39667f30b1deba26 https://github.com/boostorg/boost/releases/download/boost-1.86.0/boost-1.86.0-b2-nodocs.tar.gz /dists/boost.tgz
+ADD --checksum=sha256:4b7195b6a4f5c81af4c0212677a32ee8143643401bc6e1e8412e6b06ea82beac https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz /dists/maven.tgz
 
 FROM ubuntu:noble AS base
+ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /root
 RUN echo -e "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";" > /etc/apt/apt.conf.d/10disableextras && \
   apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests tzdata locales && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests tzdata locales openjdk-17-jdk && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
   locale-gen en_US.UTF-8 && \
-  ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+  ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+  update-java-alternatives -s "java-1.17.0-openjdk-$TARGETARCH" && \
+  ln -s "/usr/lib/jvm/java-17-openjdk-$TARGETARCH" /usr/lib/jvm/java-17-openjdk
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' \
+  JAVA_HOME="/usr/lib/jvm/java-17-openjdk-$TARGETARCH"
+
 
 FROM base AS hadoop-dist
 ENV DEBIAN_FRONTEND="noninteractive" \
   DEBCONF_TERSE="true"
 
-#######
-# OpenJDK 8 JDK
-#######
-RUN apt-get -q update && \
-  apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests openjdk-8-jdk openjdk-8-dbg && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-ARG TARGETARCH
-ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-$TARGETARCH"
 #######
 # Other build dependencies
 #######
@@ -66,12 +65,8 @@ RUN apt-get -q update && \
     libzstd-dev \
     zlib1g-dev \
     libtirpc-dev \
-    libboost-dev \
-    libboost-date-time-dev \
-    libboost-program-options-dev \
     locales \
     make \
-    maven \
     pinentry-curses \
     pkg-config \
     python3 \
@@ -95,6 +90,14 @@ ENV PYTHONIOENCODING="utf-8" \
   MAVEN_OPTS="-Xms256m -Xmx1536m"
 
 
+######
+# Install Maven 3.9.11
+######
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/maven" && \
+  tar xzf /dists/maven.tgz --strip-components 1 -C /opt/maven
+ENV PATH="${PATH}:/opt/maven/bin"
+
+
 #######
 # Install SpotBugs 4.2.2
 #######
@@ -108,17 +111,30 @@ ENV SPOTBUGS_HOME="/opt/spotbugs"
 
 
 ######
-# Install Google Protobuf 21.12
+# Install Google Protobuf 3.25.5
 ######
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/protobuf-src" && \
   tar xzf "/dists/protobuf.tgz" --strip-components 1 -C "/opt/protobuf-src" && \
+  tar xzf /dists/abseil.tgz --strip-components 1 -C /opt/protobuf-src/third_party/abseil-cpp && \
   cd /opt/protobuf-src && \
-  ./configure --prefix="/opt/protobuf" && \
-  make -j$(nproc) && \
-  make install && \
+  cmake -S . -B build -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF && \
+  cmake --build build --parallel $(nproc) && \
+  cmake --install build --prefix /opt/protobuf && \
   rm -rf "/opt/protobuf-src"
 ENV PROTOBUF_HOME="/opt/protobuf" \
   PATH="${PATH}:/opt/protobuf/bin"
+
+
+######
+# Install Boost 1.86
+######
+RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=type=cache,target=/root/.m2 install -d "/opt/boost-src" && \
+  tar xzf "/dists/boost.tgz" --strip-components 1 -C "/opt/boost-src" && \
+  cd /opt/boost-src && \
+  ./bootstrap.sh --prefix=/usr/ && \
+  ./b2 --without-python install && \
+  rm -rf "/opt/boost-src"
+
 
 ######
 # Build Hadoop
@@ -129,7 +145,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
   echo "JAVA_HOME: $JAVA_HOME" && \
   mvn --batch-mode package -Pdist,native -DskipTests -Dcyclonedx.skip=true -Dtar -Dmaven.javadoc.skip=true && \
   install -d -m 755 -o root -g root "/hadoop" && \
-  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.4.3.tar.gz" --strip-components 1 -C "/hadoop" && \
+  tar xzf "/opt/hadoop-src/hadoop-dist/target/hadoop-3.5.0.tar.gz" --strip-components 1 -C "/hadoop" && \
   chown -R root:root "/hadoop" && \
   find "/hadoop" -type d -print0 | xargs -r0 chmod 755 && \
   find "/hadoop" -type f -print0 | xargs -r0 chmod 644 && \
@@ -144,9 +160,8 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists --mount=
 
 FROM base AS hadoop-base
 ARG TARGETPLATFORM
-ARG java_version=8
 RUN apt-get -q update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests "openjdk-${java_version}-jdk" "openjdk-${java_version}-dbg" ca-certificates curl libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl3 libc6-dbg libtirpc3 && \
+  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests ca-certificates curl libsnappy1v5 libzstd1 zlib1g libbz2-1.0 libssl3 libc6-dbg libtirpc3 && \
   case "${TARGETPLATFORM}" in \
     linux/amd64) \
       DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get -q install --yes --no-upgrade --no-install-recommends --no-install-suggests libisal2; \
@@ -161,8 +176,7 @@ RUN apt-get -q update && \
   ldconfig
 COPY --from=hadoop-dist /hadoop /hadoop
 ARG TARGETARCH
-ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
-  HADOOP_HOME="/hadoop" \
+ENV HADOOP_HOME="/hadoop" \
   PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/hadoop/sbin:/hadoop/bin"
 COPY --chown=root:root ./hadoop-base/docker-entrypoint.sh /docker-entrypoint.sh
 RUN userdel -r ubuntu && \
@@ -184,12 +198,6 @@ WORKDIR /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 FROM hadoop-base AS hadoop-base-spark
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=true apt-get install --yes --no-upgrade --no-install-recommends openjdk-17-jre-headless && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  update-java-alternatives -s "java-1.${java_version}.0-openjdk-$TARGETARCH" && \
-  ln -s "/usr/lib/jvm/java-17-openjdk-$TARGETARCH" /usr/lib/jvm/java-17-openjdk
 RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install -d "/spark" && \
   tar xzf "/dists/spark.tgz" --strip-components 1 -C "/spark" && \
   chown -R root:root /spark && \
@@ -197,8 +205,7 @@ RUN --mount=type=bind,from=hadoop-downloads,source=/dists,target=/dists install 
   find /spark -type f -print0 | xargs -r0 chmod 644 && \
   find /spark/bin -type f -print0 | xargs -r0 chmod 755 && \
   find /spark/sbin -type f -print0 | xargs -r0 chmod 755
-ENV JAVA_HOME="/usr/lib/jvm/java-${java_version}-openjdk-$TARGETARCH" \
-  HADOOP_HOME="/hadoop" \
+ENV HADOOP_HOME="/hadoop" \
   PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/hadoop/sbin:/hadoop/bin:/spark/sbin:/spark/bin"
 
 FROM hadoop-base AS hadoop-client
