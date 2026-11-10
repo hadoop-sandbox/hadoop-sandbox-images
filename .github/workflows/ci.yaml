@@ -49,9 +49,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
             arch: amd64
-          - os: ubuntu-24.04-arm
+          - os: ubuntu-26.04-arm
             arch: arm64
     steps:
       -
@@ -225,7 +225,7 @@ jobs:
           echo "digest_spark_historyserver_${arch}=${digest_spark_historyserver}" >> "$GITHUB_OUTPUT"
 
   build_manifests:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: [build_images]
     if: github.event_name != 'pull_request'
 
